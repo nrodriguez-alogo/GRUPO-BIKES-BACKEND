@@ -1,5 +1,5 @@
 //nombre, correo, foto, contraseña, rol
-import { Schema } from "mongoose";
+import { Schema, model } from "mongoose";
 
 const esquemaUsuarios = new Schema({
     nombre: { type: String, required: true, trim: true },
