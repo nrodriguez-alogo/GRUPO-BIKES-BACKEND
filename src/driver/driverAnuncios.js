@@ -14,7 +14,7 @@ const controladorAnuncios = {//Controlador anuncios
                     });
                }
                const nuevoAnuncio = new modeloNoticias({
-                    titulo:req.body.nombre,
+                    titulo:req.body.titulo,
                     subtitulo:req.body.subtitulo,
                     contenido:req.body.contenido,
                     autor:req.body.autor,
@@ -36,7 +36,7 @@ const controladorAnuncios = {//Controlador anuncios
     },
     leerAnuncio: async (req, res)=>{
         try {
-            const leerAnunciosEnontrados = await modelUser.find();
+            const leerAnunciosEnontrados = await modeloNoticias.find();
             res.json({
                 mensaje: 'Anuncios encontrados correctamente',
                 data: leerAnunciosEnontrados,
@@ -81,8 +81,8 @@ const controladorAnuncios = {//Controlador anuncios
                 });
             }  
             if (req.file){//Si existe el anuncio
-                if (anuncioActualizado.imagenNoticias) {//Si ecneuntra el anuncio y tiene una imagen
-                    const actualizarImagen = path.join('imagenes', anuncioActualizado.imagenNoticias);//Se crea la constante para cambiar la ruta de esa imagen antigua
+                if (anuncioActualizado.imagen) {//Si ecneuntra el anuncio y tiene una imagen
+                    const actualizarImagen = path.join('imagenes', anuncioActualizado.imagen);//Se crea la constante para cambiar la ruta de esa imagen antigua
                     if (fs.existsSync(actualizarImagen)) {
                         fs.unlinkSync(actualizarImagen);//fs va a quitar la imagen antigua y la reemplazará con la actual
                     }
@@ -92,7 +92,7 @@ const controladorAnuncios = {//Controlador anuncios
                 titulo: req.body.titulo,
                 subtitulo:req.body.subtitulo,
                 contenido:req.body.contenido,
-                imagenNoticias:req.file ? req.file.filename: anuncioActualizado.imagenNoticias,
+                imagen:req.file ? req.file.filename: anuncioActualizado.imagen,
                 autor:req.body
             };
 
@@ -125,8 +125,8 @@ const controladorAnuncios = {//Controlador anuncios
                 datos: error,
             })
         }
-        if(anuncioABorrar.imagenNoticias){
-            const rutaImagen = path.join('imagenes', anuncioABorrar.imagenNoticias);
+        if(anuncioABorrar.imagen){
+            const rutaImagen = path.join('imagenes', anuncioABorrar.imagen);
 
             if(fs.existsSync(rutaImagen)){
                 fs.unlinkSync(rutaImagen);

@@ -5,7 +5,7 @@ const esquemaNoticias = new Schema({
     titulo: { type: String, required: true, trim: true },
     subtitulo: { type: String, required: true, trim: true },
     contenido: { type: String, required: true, trim: true },
-    imagenNoticias: { type: String, required: true, },
+    imagen: { type: String, required: true, },
     autor: { type: String, }
 });
 
