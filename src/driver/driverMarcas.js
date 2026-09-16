@@ -1,5 +1,6 @@
 import { request } from 'express';
 import modeloMarcas from '../modelos/modeloMarcas.js';
+import { uploadImage } from '../middlewares/resources.js';
 import fs from 'fs';
 import path from 'path';
 
@@ -15,12 +16,12 @@ const contMarca = {
                     });
                 }
 
-                const nuevaMarca = new esquemaMarcas({
+                const nuevaMarca = new modeloMarcas({
                     nombre: req.body.nombre,
                     paisOrigen: req.body.paisOrigen,
                     empresa: req.body.empresa,
-                    logo: req.file.filename,
-                    descripción: req.body.descripción
+                    imagen: req.file.filename,
+                    descripcion: req.body.descripcion
                 })
 
                 const guardarMarca = await nuevaMarca.save();
@@ -75,8 +76,8 @@ const contMarca = {
                 });
             }
             if(req.file){
-                if(actualizarFoto.logo){
-                    const actualizarLogo = path.join('imagenes', actualizarFoto.logo);
+                if(actualizarFoto.imagen){
+                    const actualizarLogo = path.join('imagenes', actualizarFoto.imagen);
                     if(fs.existsSync(actualizarLogo)){
                         fs.unlinkSync(actualizarLogo);
                     }
@@ -86,8 +87,8 @@ const contMarca = {
                 nombre: req.body.nombre,
                 paisOrigen: req.body.paisOrigen,
                 empresa: req.body.empresa,
-                logo: req.file ? req.file.filename : actualizarFoto.logo,
-                descripción: req.body.descripción
+                imagen: req.file ? req.file.filename : actualizarFoto.imagen,
+                descripcion: req.body.descripcion
             }
 
             const actualizarMarca = await modeloMarcas.findByIdAndUpdate(
@@ -123,8 +124,8 @@ const contMarca = {
             })
         }
 
-        if(marcaParaEliminar.Foto){
-            const rutaFoto = path.join('imagenes', marcaParaEliminar.Foto);
+        if(marcaParaEliminar.imagen){
+            const rutaFoto = path.join('imagenes', marcaParaEliminar.imagen);
 
             if(fs.existsSync(rutaFoto)){
                 fs.unlinkSync(rutaFoto);
