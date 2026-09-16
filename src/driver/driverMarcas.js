@@ -1,5 +1,5 @@
 import { request } from 'express';
-import modeloMarcas from '../modelos/modeloMarcas';
+import modeloMarcas from '../modelos/modeloMarcas.js';
 import fs from 'fs';
 import path from 'path';
 
