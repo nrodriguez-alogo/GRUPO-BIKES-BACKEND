@@ -7,7 +7,7 @@ rutaAnuncios.post('/', controladorAnuncios.crearAnuncio);
 rutaAnuncios.get('/', controladorAnuncios.leerAnuncio);
 rutaAnuncios.get('/:id', controladorAnuncios.leerAnuncioId);
 rutaAnuncios.delete('/:id', controladorAnuncios.borrarAnuncio);
-rutaAnuncios.put('/:id', controladorAnuncios.actualizarAnuncio);
+rutaAnuncios.put('/:id', uploadImage, controladorAnuncios.actualizarAnuncio);//upload image
 
 
 //Exportar por defecto la ruta de alumnos
