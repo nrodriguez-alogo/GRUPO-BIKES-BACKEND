@@ -1,5 +1,5 @@
 //país de origen, empresa, logo, descripción, nombre
-import { Schema } from "mongoose";
+import { Schema , model} from "mongoose";
 
 const esquemaMarcas = new Schema({
     nombre: { type: String, required: true, trim: true },
