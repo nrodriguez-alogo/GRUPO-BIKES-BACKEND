@@ -92,8 +92,8 @@ const controladorAnuncios = {//Controlador anuncios
                 titulo: req.body.titulo,
                 subtitulo:req.body.subtitulo,
                 contenido:req.body.contenido,
-                imagen:req.file ? req.file.filename: anuncioActualizado.imagen,
-                autor:req.body
+                autor:req.body.autor,
+                imagen:req.file ? req.file.filename: anuncioActualizado.imagen
             };
 
             const modeloNoticiActualizado = await modeloNoticias.findByIdAndUpdate(
