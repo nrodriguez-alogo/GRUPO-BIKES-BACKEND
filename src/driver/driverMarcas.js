@@ -143,7 +143,25 @@ const contMarca = {
                 datos: error,
             });
        } 
-    }
+    },
+
+    leerMarcas : async (req, res) => {
+        try {
+            const marcasEncontradas = await modeloMarcas.find();
+            
+                res.json({
+                    mensaje: 'Marcas encontradas',
+                    datos: marcasEncontradas,
+                })
+        
+        } catch (error) {
+            res.json({
+                mensaje: 'Ocurrió un error al buscar la marca',
+                datos: error,
+            })
+        }
+
+    },
 }
 
 
