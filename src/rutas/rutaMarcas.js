@@ -7,6 +7,7 @@ const marcasRoutes = Router();
 
 marcasRoutes.post('/', contMarca.crearMarca);
 marcasRoutes.get('/:id', contMarca.leerMarca);
+marcasRoutes.get('/', contMarca.leerMarcas);
 marcasRoutes.put('/:id', uploadImage, contMarca.actualizarMarca);
 marcasRoutes.delete('/:id', contMarca.eliminarMarca);
 
