@@ -1,8 +1,8 @@
 import { Router } from "express";
-import controladorLogin from "../driver/driverLogin";
+import controladorLogin from "../driver/driverLogin.js";
 
 const rutalogin = Router();
-rutalogin.post('/', controladorLogin,login);
+rutalogin.post('/', controladorLogin.login);
 rutalogin.get('/token/:token2', controladorLogin. validarToken);
 
 export default rutalogin;

@@ -1,6 +1,6 @@
 import modeloUsuarios from "../modelos/modeloUsuarios.js";
 import { generarToken, verificarToken } from "../ayudas/funciones.js";
-import bcrypt from "bycriptjs";
+import bcrypt from "bcrypt";
 
 const controladorLogin = {
     login: async(req, res)=>{
