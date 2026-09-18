@@ -1,16 +1,12 @@
 import { Router } from "express";
-import { 
-    obtenerUsuarios, 
-    crearUsuario, 
-    actualizarUsuario, 
-    eliminarUsuario 
-} from "../driver/driverUsuario.js";
+import controladorUsuario from "../driver/driverUsuario.js";
 
 const rutaUsuarios = Router();
 
-rutaUsuarios.get('/', obtenerUsuarios);
-rutaUsuarios.post('/', crearUsuario);
-rutaUsuarios.put('/:id', actualizarUsuario);
-rutaUsuarios.delete('/:id', eliminarUsuario);
+rutaUsuarios.post('/', controladorUsuario.crearUsuario);
+rutaUsuarios.get('/', controladorUsuario.leerUsuario);
+rutaUsuarios.get('/:id', controladorUsuario.leerUsuarioId);
+rutaUsuarios.put('/:id',  controladorUsuario.actualizarUsuario);
+rutaUsuarios.delete('/:id', controladorUsuario.borrarUsuario);
 
 export default rutaUsuarios;

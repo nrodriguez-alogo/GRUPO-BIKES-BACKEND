@@ -1,4 +1,3 @@
-//titulo, subtitulo, contenido, imagen, autor
 import {Schema, model} from "mongoose";
 
 const esquemaNoticias = new Schema({
