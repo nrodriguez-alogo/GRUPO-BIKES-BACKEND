@@ -9,7 +9,7 @@ const controladorLogin = {
 const encontrarUsuario = await modeloUsuarios.findOne({
     correo:username,//Se asigna el correo como "username"
 });
-const validacionContraseña = await bcrypt.compare(contraseña, encontrarUsuario.contraseña);
+const validacionContraseña = bcrypt.compare(contraseña, encontrarUsuario.contraseña);
 if (validacionContraseña){
     const token = await generarToken (
         {
