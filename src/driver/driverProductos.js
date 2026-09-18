@@ -1,4 +1,5 @@
-import modeloProducto from '../modelos/modeloProductos.js';
+import { request } from 'express';
+import modeloProductos from '../modelos/modeloProductos.js';
 import { uploadImage } from '../middlewares/resources.js';
 import fs from 'fs';
 import path from 'path';
@@ -14,10 +15,10 @@ const controladorProducto = {
                     });
                 }
 
-                const nuevoProducto = new modeloProducto({
+                const nuevoProducto = new modeloProductos({
                     modelo: req.body.modelo,
                     marca: req.body.marca,
-                    foto: req.file ? req.file.filename : null,
+                    imagen: req.file ? req.file.filename : null,
                     descripcion: req.body.descripcion,
                     color: req.body.color,
                     categoria: req.body.categoria,
@@ -40,10 +41,9 @@ const controladorProducto = {
             });
         }
     },
-
     leerProductos: async (req, res) => {
         try {
-            const productos = await modeloProducto.find();
+            const productos = await modeloProductos.find();
             res.status(200).json({
                 mensaje: 'Productos encontrados correctamente',
                 datos: productos
@@ -58,7 +58,7 @@ const controladorProducto = {
 
     leerProductoId: async (req, res) => {
         try {
-            const producto = await modeloProducto.findById(req.params.id);
+            const producto = await modeloProductos.findById(req.params.id);
             if (!producto) {
                 return res.status(404).json({ mensaje: 'Producto no encontrado' });
             }
@@ -81,27 +81,27 @@ const controladorProducto = {
                     return res.status(400).json({ mensaje: 'Error al procesar la imagen', datos: error });
                 }
 
-                const productoExistente = await modeloProducto.findById(req.params.id);
+                const productoExistente = await modeloProductos.findById(req.params.id);
                 if (!productoExistente) {
                     if (req.file) fs.unlinkSync(req.file.path);
                     return res.status(404).json({ mensaje: 'Producto no encontrado' });
                 }
 
-                let nuevaFoto = productoExistente.foto;
+                let nuevaimagen = productoExistente.imagen;
                 if (req.file) {
-                    if (productoExistente.foto) {
-                        const rutaFotoAntigua = path.join('imagenes', productoExistente.foto);
-                        if (fs.existsSync(rutaFotoAntigua)) {
-                            fs.unlinkSync(rutaFotoAntigua);
+                    if (productoExistente.imagen) {
+                        const rutaimagenAntigua = path.join('imagenes', productoExistente.imagen);
+                        if (fs.existsSync(rutaimagenAntigua)) {
+                            fs.unlinkSync(rutaimagenAntigua);
                         }
                     }
-                    nuevaFoto = req.file.filename;
+                    nuevaimagen = req.file.filename;
                 }
 
-                const nuevoModeloProducto = {
+                const nuevomodeloProductos = {
                     modelo: req.body.modelo || productoExistente.modelo,
                     marca: req.body.marca || productoExistente.marca,
-                    foto: nuevaFoto,
+                    imagen: nuevaimagen,
                     descripcion: req.body.descripcion || productoExistente.descripcion,
                     color: req.body.color || productoExistente.color,
                     categoria: req.body.categoria || productoExistente.categoria,
@@ -110,9 +110,9 @@ const controladorProducto = {
                     cilindraje: req.body.cilindraje || productoExistente.cilindraje
                 };
 
-                const productoActualizado = await modeloProducto.findByIdAndUpdate(
+                const productoActualizado = await modeloProductos.findByIdAndUpdate(
                     req.params.id,
-                    nuevoModeloProducto,
+                    nuevomodeloProductos,
                     { new: true, runValidators: true }
                 );
 
@@ -131,15 +131,15 @@ const controladorProducto = {
 
     borrarProducto: async (req, res) => {
         try {
-            const productoABorrar = await modeloProducto.findByIdAndDelete(req.params.id);
+            const productoABorrar = await modeloProductos.findByIdAndDelete(req.params.id);
             if (!productoABorrar) {
                 return res.status(404).json({ mensaje: 'Producto no encontrado para eliminar.' });
             }
 
-            if (productoABorrar.foto) {
-                const rutaFoto = path.join('imagenes', productoABorrar.foto);
-                if (fs.existsSync(rutaFoto)) {
-                    fs.unlinkSync(rutaFoto);
+            if (productoABorrar.imagen) {
+                const rutaimagen = path.join('imagenes', productoABorrar.imagen);
+                if (fs.existsSync(rutaimagen)) {
+                    fs.unlinkSync(rutaimagen);
                 }
             }
 

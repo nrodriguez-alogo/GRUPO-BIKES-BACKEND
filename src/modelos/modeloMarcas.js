@@ -1,4 +1,3 @@
-//país de origen, empresa, logo, descripción, nombre
 import { Schema , model} from "mongoose";
 
 
