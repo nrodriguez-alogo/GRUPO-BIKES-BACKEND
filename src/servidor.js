@@ -7,6 +7,7 @@ import marcasRoutes from './rutas/rutaMarcas.js';
 import rutaAnuncios from './rutas/rutaAnuncios.js';
 import rutaProductos from './rutas/rutaProductos.js';
 import rutaUsuarios from './rutas/rutaUsuarios.js';
+import rutalogin from './rutas/rutaLogin.js';
 
 const servidor = express();
 
@@ -23,6 +24,7 @@ servidor.use('/marcas', marcasRoutes);
 servidor.use('/noticias', rutaAnuncios);
 servidor.use('/productos', rutaProductos);
 servidor.use('/usuarios', rutaUsuarios);
+servidor.use('/login', rutalogin);
 
 // Ruta raíz
 servidor.get('/', (req, res) => {
