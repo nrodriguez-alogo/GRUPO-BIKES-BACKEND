@@ -25,6 +25,8 @@ servidor.use('/noticias', rutaAnuncios);
 servidor.use('/productos', rutaProductos);
 servidor.use('/usuarios', rutaUsuarios);
 servidor.use('/login', rutalogin);
+servidor.use('/login/token', rutalogin);
+
 
 // Ruta raíz
 servidor.get('/', (req, res) => {

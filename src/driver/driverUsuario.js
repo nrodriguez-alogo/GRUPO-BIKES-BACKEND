@@ -3,6 +3,7 @@ import modeloUsuarios from '../modelos/modeloUsuarios.js';
 import { uploadImage } from '../middlewares/resources.js';
 import fs from 'fs';
 import path from 'path';
+import bcrypt from "bcrypt";
 
 const controladorUsuario = {
     crearUsuario: async (req, res) => {
@@ -14,12 +15,13 @@ const controladorUsuario = {
                         datos: error
                     });
                 }
-
+                console.log('Keys:', Object.keys(req.body));
+                const contrasenaHash = await bcrypt.hash(req.body.contrasena, 10);
                 const nuevoUsuario = new modeloUsuarios ({
                     nombre: req.body.nombre,
                     correo: req.body.correo,
                     imagen: req.file ? req.file.filename : null,
-                    contraseña: req.body.contraseña,
+                    contrasena: contrasenaHash,
                     rol: req.body.rol
                 });
 
@@ -98,7 +100,7 @@ const controladorUsuario = {
                     nombre: req.body.nombre || usuarioExistente.nombre,
                     correo: req.body.correo || usuarioExistente.correo,
                     imagen: nuevaimagen1,
-                    contraseña: req.body.contraseña || usuarioExistente.contraseña,
+                    contrasena: req.body.contrasena || usuarioExistente.contrasena,
                     rol: req.body.rol || usuarioExistente.rol,
                 };
 
