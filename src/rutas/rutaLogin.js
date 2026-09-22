@@ -3,6 +3,6 @@ import controladorLogin from "../driver/driverLogin.js";
 
 const rutalogin = Router();
 rutalogin.post('/', controladorLogin.login);
-rutalogin.get('/token/:token2', controladorLogin. validarToken);
+rutalogin.post('/token', controladorLogin. validarToken);
 
 export default rutalogin;

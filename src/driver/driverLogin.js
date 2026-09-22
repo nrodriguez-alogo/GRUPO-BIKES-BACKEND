@@ -4,13 +4,22 @@ import bcrypt from "bcrypt";
 
 const controladorLogin = {
     login: async(req, res)=>{
+        console.log(req.body);
         try {
-/*revisar nombre de usuario*/const{username, contraseña}=req.body;
-const encontrarUsuario = await modeloUsuarios.findOne({
-    correo:username,//Se asigna el correo como "username"
-});
-const validacionContraseña = await bcrypt.compare(contraseña, encontrarUsuario.contraseña);
-if (validacionContraseña){
+/*revisar nombre de usuario*/const{username, contrasena}=req.body;
+console.log('1. Entró al login');
+const encontrarUsuario = await modeloUsuarios
+.findOne({correo:username})
+.select('+contrasena');
+
+console.log('3. Usuario encontrado:', encontrarUsuario.contrasena);
+console.log('data (Postman):', contrasena);
+console.log('hash (MongoDB):', encontrarUsuario.contrasena);
+
+const validacionContrasena = await bcrypt.compare(contrasena, encontrarUsuario.contrasena);
+console.log('4. Contrasena válida:', validacionContrasena);
+
+if (validacionContrasena){
     const token = await generarToken (
         {
             id : encontrarUsuario._id,
@@ -23,14 +32,14 @@ if (validacionContraseña){
             datos: token,
         });
     }
-     else {res.json({mensaje:'Contraseña o usuario incorrecto',
+     else {res.json({mensaje:'Contrasena o usuario incorrecto',
         datos:null,
      });
     }
         } catch (error) {
             res.json({
                 mensaje: 'Error al logear',
-                datos: error,
+                datos: error.message,
             });
             
         }
@@ -39,7 +48,7 @@ if (validacionContraseña){
 
 validarToken: async (req, res) =>{
     try {
-        const token2 = req.param.token;
+        const token2 = req.params.token;
         const validar = await verificarToken(token2);
         if(validar && validacion.id){
             res.json({
@@ -52,7 +61,7 @@ validarToken: async (req, res) =>{
     } catch (error) {
         res.json({
             mensaje: 'Ocurrio un error al validar el token',
-            datos: error,
+            datos: error.message,
         });
         
     }
