@@ -35,7 +35,12 @@ servidor.get('/', (req, res) => {
 
 // Ruta por defecto para manejar endpoints no encontrados (404)
 servidor.use((req, res) => {
-    res.status(404).json({ mensaje: "Ruta no encontrada" });
+    console.log(`404: ${req.method} ${req.originalUrl}`);
+    res.status(404).json({
+        mensaje: "Ruta no encontrada",
+        metodo: req.method,
+        ruta: req.originalUrl,
+    });
 });
 
 export default servidor;

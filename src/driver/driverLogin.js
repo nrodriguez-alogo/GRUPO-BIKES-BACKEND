@@ -50,12 +50,10 @@ validarToken: async (req, res) =>{
     try {
         const token2 = req.params.token;
         const validar = await verificarToken(token2);
-        if(validar && validacion.id){
-            res.json({
-                mensaje: 'Token invalido',
-                datos: null,
-            });
-
+        if (validar && validar.id) {
+            res.json({ mensaje: 'Token válido', datos: validar });
+        } else {
+            res.status(401).json({ mensaje: 'Token inválido', datos: null });
         }
     
     } catch (error) {
