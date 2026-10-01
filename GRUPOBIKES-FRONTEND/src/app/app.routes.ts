@@ -4,6 +4,7 @@ import { Anuncios } from './componentes/anuncios/anuncios';
 import { Login } from './componentes/login/login';
 import { Marcas } from './componentes/marcas/marcas';
 import { Navegacion } from './componentes/navegacion/navegacion';
+import { Footer } from './componentes/footer/footer';  
 import { Productos } from './componentes/productos/productos';
 import { Registro } from './componentes/registro/registro';
 import { Usuarios } from './componentes/usuarios/usuarios';
@@ -20,5 +21,5 @@ export const routes: Routes = [
     {path: 'usuarios', title: 'Usuarios', component: Usuarios},
     {path: '', redirectTo: 'Home', pathMatch: 'full'},
     {path: '**', title: '404', component: PageNotFound},
-
+    {path: 'footer', title: 'Footer', component: Footer}
 ];
