@@ -2,7 +2,6 @@
 body{
     background-image: url('/thumb-1920-7181.jpg');
     background-size: cover;
-    
 }
 hr{
     height: 2px;
@@ -26,7 +25,7 @@ hr{
     background-color: rgba(255, 252, 252, 0);
     height: 10rem;
 }
-.productos-texto{
+.prodcutos-texto{
     text-align: center;
     color: beige;
     text-shadow: 0px 0px 20px wheat;
