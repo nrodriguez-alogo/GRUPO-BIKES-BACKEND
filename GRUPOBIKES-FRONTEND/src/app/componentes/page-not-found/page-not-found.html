@@ -6,6 +6,60 @@
     <title>Pagina No Encontrada</title>
 </head>
 <body>
-    Pagina No Encontrada (404)
+    <div class="container">
+    <!-- Bandera de meta en escala de grises -->
+    <div class="checker-flag"></div>
+
+    <!-- Gráfico SVG: Tablero de Moto / Tacómetro / Rueda formando el 404 -->
+    <svg class="moto-gauge-graphic" viewBox="0 0 300 160" xmlns="http://www.w3.org/2000/svg">
+      <!-- Arco exterior del tacómetro -->
+      <path d="M 30 130 A 110 110 0 0 1 270 130" fill="none" stroke="#232731" stroke-width="12" stroke-linecap="round"/>
+      <path d="M 40 125 A 100 100 0 0 1 260 125" fill="none" stroke="#454b5a" stroke-width="3" stroke-dasharray="2 6" stroke-linecap="round"/>
+      
+      <!-- Marca de RPM / Límite de revoluciones en gris claro -->
+      <path d="M 220 50 A 100 100 0 0 1 260 125" fill="none" stroke="#888" stroke-width="4" stroke-linecap="round"/>
+
+      <!-- Aguja indicadora apuntando a 0 RPM (Motor apagado) -->
+      <line x1="150" y1="110" x2="55" y2="120" stroke="#f0f2f5" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="150" cy="110" r="6" fill="#f0f2f5"/>
+
+      <!-- Texto del 404 usando el Neumático como Cero central -->
+      <!-- Número 4 Izquierdo -->
+      <text x="65" y="115" font-family="sans-serif" font-weight="900" font-size="52" fill="#f0f2f5" text-anchor="middle">4</text>
+      
+      <!-- Neumático/Rin de moto central (El 0) -->
+      <g transform="translate(150, 95)">
+        <circle cx="0" cy="0" r="26" fill="#14161b" stroke="#f0f2f5" stroke-width="5"/>
+        <circle cx="0" cy="0" r="14" fill="none" stroke="#555b6e" stroke-width="2"/>
+        <circle cx="0" cy="0" r="5" fill="#f0f2f5"/>
+        <!-- Rayos del rin -->
+        <line x1="0" y1="-14" x2="0" y2="-5" stroke="#888" stroke-width="2"/>
+        <line x1="0" y1="5" x2="0" y2="14" stroke="#888" stroke-width="2"/>
+        <line x1="-14" y1="0" x2="-5" y2="0" stroke="#888" stroke-width="2"/>
+        <line x1="5" y1="0" x2="14" y2="0" stroke="#888" stroke-width="2"/>
+        <!-- Labrado exterior del neumático -->
+        <circle cx="0" cy="0" r="28" fill="none" stroke="#333" stroke-width="2" stroke-dasharray="4 4"/>
+      </g>
+      
+      <!-- Número 4 Derecho -->
+      <text x="235" y="115" font-family="sans-serif" font-weight="900" font-size="52" fill="#f0f2f5" text-anchor="middle">4</text>
+
+      
+    </svg>
+
+    <h1 class="title">Ruta sin Salida</h1>
+    <br>
+    <p class="description">
+      Lo siento. Página no encontrada.
+    </p>
+
+    <!-- Botón -->
+    <a href="/" class="btn">
+      <svg class="btn-icon" viewBox="0 0 24 24">
+        <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+      </svg>
+      Volver al Inicio
+    </a>
+  </div>
 </body>
 </html>

@@ -1,0 +1,96 @@
+/* Paleta en escala de grises */
+    :root {
+      --bg-dark: #0a0b0d;          /* Gris asfalto profundo */
+      --card-bg: #14161b;          /* Gris garaje/panel */
+      --border-color: #272a33;     /* Gris metálico bordon */
+      --text-bright: #f0f2f5;      /* Blanco cromo */
+      --text-muted: #737987;       /* Gris humo/escape */
+      --accent-gray: #2c303a;      /* Gris motor */
+      --btn-hover: #3f4452;        /* Gris embrague */
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    body {
+        height: 100%;
+        width: 100%;
+
+      background-color: var(--bg-dark);
+      color: var(--text-bright);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+      /* Fondo con textura*/
+      background-image: 
+        radial-gradient(circle at 50% 50%, rgba(255,255,255,0.03) 0%, transparent 60%),
+        radial-gradient(var(--border-color) 1px, transparent 1px);
+      background-size: 100% 100%, 20px 20px;
+    }
+
+    /* Tarjeta */
+    .container {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      padding: 40px 32px;
+      max-width: 480px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    
+    .description {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+      margin-bottom: 28px;
+    }
+
+    /* Botón de acción */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      background-color: var(--accent-gray);
+      color: var(--text-bright);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding: 14px 24px;
+      border-radius: 10px;
+      border: 1px solid var(--border-color);
+      transition: all 0.2s ease;
+    }
+
+    .btn:hover {
+      background-color: var(--btn-hover);
+      border-color: #555b6e;
+      transform: translateY(-2px);
+    }
+
+    .btn-icon {
+      width: 18px;
+      height: 18px;
+      fill: currentColor;
+    }
+    /*Forzar ocultar*/
+    :host-context(body) app-navbar,
+    :host-context(body) app-footer,
+    :host-context(body) navbar,
+    :host-context(body) footer {
+    display: none !important;
+    }
+
+   
