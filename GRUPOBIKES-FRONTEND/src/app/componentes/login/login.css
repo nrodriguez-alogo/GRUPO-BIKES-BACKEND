@@ -1,0 +1,185 @@
+/* Reset básico para que no se descuadre */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Contenedor principal centrado en pantalla */
+.login-contenedor {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #121212;
+  padding: 20px;
+}
+
+/* Tarjeta del formulario */
+.login-tarjeta {
+  background-color: #1e1e1e;
+  border: 1px solid #333333;
+  border-radius: 12px;
+  padding: 35px 30px;
+  width: 100%;
+  max-width: 380px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+/* Encabezado */
+.login-header {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.brand-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: bold;
+  color: #888888;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  background-color: #151515;
+  padding: 4px 10px;
+  border-radius: 20px;
+  border: 1px solid #2a2a2a;
+}
+
+.brand-badge .dot {
+  width: 6px;
+  height: 6px;
+  background-color: #aaaaaa;
+  border-radius: 50%;
+}
+
+.login-header h2 {
+  color: #ffffff;
+  font-size: 22px;
+  margin-bottom: 6px;
+}
+
+.login-header p {
+  color: #888888;
+  font-size: 13px;
+}
+
+/* Formulario y campos de texto */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: left;
+}
+
+.form-group label {
+  color: #cccccc;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.forgot-link {
+  color: #888888;
+  font-size: 12px;
+  text-decoration: none;
+}
+
+.forgot-link:hover {
+  color: #cccccc;
+  text-decoration: underline;
+}
+
+.form-group input {
+  background-color: #121212;
+  border: 1px solid #333333;
+  border-radius: 6px;
+  padding: 12px;
+  color: #ffffff;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.form-group input:focus {
+  border-color: #666666;
+}
+
+.form-group input::placeholder {
+  color: #555555;
+}
+
+/* Checkbox de recordar contraseña */
+.form-options {
+  display: flex;
+  align-items: center;
+}
+
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #888888;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.checkbox-container input {
+  accent-color: #555555;
+  cursor: pointer;
+}
+
+/* Botón de envío */
+.btn-login {
+  background-color: #333333;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  padding: 12px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 5px;
+  transition: background-color 0.2s;
+}
+
+.btn-login:hover {
+  background-color: #444444;
+}
+
+/* Pie de la tarjeta */
+.login-footer {
+  margin-top: 25px;
+  padding-top: 20px;
+  border-top: 1px solid #282828;
+  text-align: center;
+}
+
+.login-footer p {
+  color: #888888;
+  font-size: 13px;
+}
+
+.login-footer a {
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.login-footer a:hover {
+  text-decoration: underline;
+}
