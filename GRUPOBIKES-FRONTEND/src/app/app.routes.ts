@@ -1,47 +1,22 @@
 import { Routes } from '@angular/router';
+import { Home } from './componentes/home/home';
+import { Anuncios } from './componentes/anuncios/anuncios';
+import { Login } from './componentes/login/login';
+import { Marcas } from './componentes/marcas/marcas';
+import { Productos } from './componentes/productos/productos';
+import { Registro } from './componentes/registro/registro';
+import { Usuarios } from './componentes/usuarios/usuarios';
+import { PageNotFound } from './componentes/page-not-found/page-not-found';
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'home', pathMatch: 'full' },
-  { path: 'Home', redirectTo: 'home', pathMatch: 'full' },
-  
-  { 
-    path: 'home', 
-    title: 'Home', 
-    loadComponent: () => import('./componentes/home/home').then(m => m.Home) 
-  },
-  { 
-    path: 'anuncios', 
-    title: 'Anuncios', 
-    loadComponent: () => import('./componentes/anuncios/anuncios').then(m => m.Anuncios) 
-  },
-  { 
-    path: 'login', 
-    title: 'Login', 
-    loadComponent: () => import('./componentes/login/login').then(m => m.Login) 
-  },
-  { 
-    path: 'marcas', 
-    title: 'Marcas', 
-    loadComponent: () => import('./componentes/marcas/marcas').then(m => m.Marcas) 
-  },
-  { 
-    path: 'productos', 
-    title: 'Productos', 
-    loadComponent: () => import('./componentes/productos/productos').then(m => m.Productos) 
-  },
-  { 
-    path: 'registro', 
-    title: 'Registro', 
-    loadComponent: () => import('./componentes/registro/registro').then(m => m.Registro) 
-  },
-  { 
-    path: 'usuarios', 
-    title: 'Usuarios', 
-    loadComponent: () => import('./componentes/usuarios/usuarios').then(m => m.Usuarios) 
-  },
-  { 
-    path: '**', 
-    title: '404 - Página no encontrada', 
-    loadComponent: () => import('./componentes/page-not-found/page-not-found').then(m => m.PageNotFound) 
-  }
+
+  { path: 'home', title: 'Home', component: Home },
+  { path: 'anuncios', title: 'Anuncios', component: Anuncios },
+  { path: 'login', title: 'Login', component: Login },
+  { path: 'marcas', title: 'Marcas', component: Marcas },
+  { path: 'productos', title: 'Productos', component: Productos },
+  { path: 'registro', title: 'Registro', component: Registro },
+  { path: 'usuarios', title: 'Usuarios', component: Usuarios },
+  {path: '', redirectTo: 'home', pathMatch: 'full'},
+  {path: '**',title: '404 - Página no encontrada',component: PageNotFound}
 ];
