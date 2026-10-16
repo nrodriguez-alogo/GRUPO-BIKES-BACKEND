@@ -5,6 +5,10 @@
   left: 0;
   z-index: 1000;
 }
+a {
+  color: inherit; /* Hereda el color del texto que lo rodea, o pon un color específico como #000000 */
+  text-decoration: none; /* Elimina el subrayado predeterminado */
+}
 
 .header-container {
   width: 100%;
