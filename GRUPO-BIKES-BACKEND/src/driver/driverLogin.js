@@ -4,28 +4,17 @@ import bcrypt from "bcrypt";
 
 const controladorLogin = {
     login: async(req, res)=>{
-        console.log(req.body);
         try {
-/*revisar nombre de usuario*/const{username, contrasena}=req.body;
-console.log('1. Entró al login');
-const encontrarUsuario = await modeloUsuarios
-.findOne({correo:username})
-.select('+contrasena');
-
-console.log('3. Usuario encontrado:', encontrarUsuario.contrasena);
-console.log('data (Postman):', contrasena);
-console.log('hash (MongoDB):', encontrarUsuario.contrasena);
-
+const{correo, contrasena}=req.body;
+const encontrarUsuario = await modeloUsuarios.findOne({correo:correo});
 const validacionContrasena = await bcrypt.compare(contrasena, encontrarUsuario.contrasena);
-console.log('4. Contrasena válida:', validacionContrasena);
-
 if (validacionContrasena){
     const token = await generarToken (
         {
             id : encontrarUsuario._id,
             nombre: encontrarUsuario.nombre,
             imagen: encontrarUsuario.imagen,
-            rol: encontrarUsuario.rol,
+            rol: encontrarUsuario.rol, /* SE DEBE USAR EN POSTMAN "CORREO" y "CONTRASENA" */
         });
         res.json({
             mensaje: `Bienvenido ${encontrarUsuario.nombre}`,
@@ -44,14 +33,12 @@ if (validacionContrasena){
             
         }
     },
-
-
 validarToken: async (req, res) =>{
     try {
         const token2 = req.params.token;
         const validar = await verificarToken(token2);
         if (validar && validar.id) {
-            res.json({ mensaje: 'Token válido', datos: validar });
+            res.json({ mensaje: 'Token valido', datos: validar });
         } else {
             res.status(401).json({ mensaje: 'Token inválido', datos: null });
         }
@@ -61,9 +48,7 @@ validarToken: async (req, res) =>{
             mensaje: 'Ocurrio un error al validar el token',
             datos: error.message,
         });
-        
     }
 }
 }
-
 export default controladorLogin;
