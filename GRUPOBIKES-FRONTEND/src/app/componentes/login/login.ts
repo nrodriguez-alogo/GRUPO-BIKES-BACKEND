@@ -7,6 +7,7 @@ import { LoginService } from '../../services/login-service';
 import { response } from 'express';
 
 
+
 @Component({
   selector: 'app-login',
   imports: [ReactiveFormsModule],
@@ -17,7 +18,7 @@ export class Login {
   loginService: LoginService = inject(LoginService);
   CredentialsForm = new FormGroup({
     username: new FormControl('', Validators. required),
-    password: new FormControl('', Validators. required),
+    contrasena: new FormControl('', Validators. required),
   });
 
   handleSubmit(){
@@ -25,22 +26,22 @@ export class Login {
    console.log(this.CredentialsForm);
     if (this.CredentialsForm.valid){
     const username = this.CredentialsForm.value.username;
-    const password = this.CredentialsForm.value.password;
+    const contrasena = this.CredentialsForm.value.contrasena;
 
-    if(typeof username === 'string' && typeof password === 'string'){//Si username y password es exactamente igual a tipo string. Será de tipo string y validará la constante credential 
+    if(typeof username === 'string' && typeof contrasena === 'string'){//Si username y contrasena es exactamente igual a tipo string. Será de tipo string y validará la constante credential 
     const credential: Credential = {
         username,
-        password,
+        contrasena,
   };
-  console.log(credential);
-  this.loginService.login(credential).subscribe((response: any)=> {
-    console.log("response: ", response);
-  })
+  // console.log(credential);
+ this.loginService.login(credential).subscribe((response: any)=> {
+     console.log("response: ", response);
+})
 
-    } else {
-    console.log('Error, formulario invalido');
+//     } else {
+// console.log('Error, formulario invalido');
     }
-  }
+}
 }
 }
 
