@@ -1,21 +1,46 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
+import { Credential } from '../../interfaces/credential';
+import { ReactiveFormsModule, FormControl, FormGroup, Validators } from '@angular/forms';
+import { required } from '@angular/forms/signals';
+import { LoginService } from '../../services/login-service';
+import { response } from 'express';
 
 
 @Component({
   selector: 'app-login',
-  imports: [RouterLink],
+  imports: [ReactiveFormsModule],
   templateUrl: './login.html',
   styleUrl: './login.css',
 })
 export class Login {
+  loginService: LoginService = inject(LoginService);
+  CredentialsForm = new FormGroup({
+    username: new FormControl('', Validators. required),
+    password: new FormControl('', Validators. required),
+  });
 
-  constructor(private router: Router) {}
+  handleSubmit(){
+   //console.log("funciona(works)");
+   console.log(this.CredentialsForm);
+    if (this.CredentialsForm.valid){
+    const username = this.CredentialsForm.value.username;
+    const password = this.CredentialsForm.value.password;
 
-  // Método para enviar el formulario
-  onLogin(): void {
-    
+    if(typeof username === 'string' && typeof password === 'string'){//Si username y password es exactamente igual a tipo string. Será de tipo string y validará la constante credential 
+    const credential: Credential = {
+        username,
+        password,
+  };
+  console.log(credential);
+  this.loginService.login(credential).subscribe((response: any)=> {
+    console.log("response: ", response);
+  })
 
-    this.router.navigate(['/home']);
+    } else {
+    console.log('Error, formulario invalido');
+    }
   }
 }
+}
+

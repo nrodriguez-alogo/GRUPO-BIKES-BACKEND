@@ -1,6 +1,7 @@
 import express from 'express';
 import morgan from 'morgan';
 import path from 'path';
+import cors from 'cors';
 
 // Importación de rutas
 import marcasRoutes from './rutas/rutaMarcas.js';
@@ -10,7 +11,7 @@ import rutaUsuarios from './rutas/rutaUsuarios.js';
 import rutalogin from './rutas/rutaLogin.js';
 
 const servidor = express();
-
+servidor.use(cors({origin: 'http://localhost:4200'}));
 // Middlewares globales
 servidor.use(morgan("dev")); // Logger para desarrollo
 servidor.use(express.json()); // Middleware para parsear JSON

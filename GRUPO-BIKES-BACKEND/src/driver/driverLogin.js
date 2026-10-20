@@ -5,8 +5,15 @@ import bcrypt from "bcrypt";
 const controladorLogin = {
     login: async(req, res)=>{
         try {
-const{correo, contrasena}=req.body;
-const encontrarUsuario = await modeloUsuarios.findOne({correo:correo});
+/*revisar nombre de usuario*/const{username, contrasena}=req.body;
+console.log('1. Entró al login');
+const encontrarUsuario = await modeloUsuarios.findOne({correo:username})
+.select('+contrasena');
+
+console.log('3. Usuario encontrado:', encontrarUsuario.contrasena);
+console.log('data (Postman):', contrasena);
+console.log('hash (MongoDB):', encontrarUsuario.contrasena);
+
 const validacionContrasena = await bcrypt.compare(contrasena, encontrarUsuario.contrasena);
 if (validacionContrasena){
     const token = await generarToken (
