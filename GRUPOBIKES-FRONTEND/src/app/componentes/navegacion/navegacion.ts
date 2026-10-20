@@ -6,7 +6,6 @@ import { DecimalPipe } from '@angular/common';
   selector: 'app-navegacion',
   imports: [
     RouterLink,
-    RouterLinkActive,
     DecimalPipe
   ],
   templateUrl: './navegacion.html',

@@ -1,185 +1,94 @@
-/* Reset básico para que no se descuadre */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  font-family: Arial, Helvetica, sans-serif;
-}
-
-/* Contenedor principal centrado en pantalla */
-.login-contenedor {
+/* Centra la tarjeta vertical y horizontalmente en la pantalla con fondo gris muy oscuro */
+.login-wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background-color: #121212;
-  padding: 20px;
+  background-color: #121212; /* Gris casi negro */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* Tarjeta del formulario */
-.login-tarjeta {
-  background-color: #1e1e1e;
-  border: 1px solid #333333;
+/* Caja oscura con bordes neutros */
+.login-card {
+  background: #1e1e1e; /* Gris oscuro neutro */
+  padding: 2.5rem;
   border-radius: 12px;
-  padding: 35px 30px;
+  border: 1px solid #2d2d2d;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.6);
   width: 100%;
-  max-width: 380px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  max-width: 400px;
 }
 
-/* Encabezado */
-.login-header {
+.login-card h2 {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  color: #ffffff; /* Blanco puro */
   text-align: center;
-  margin-bottom: 25px;
 }
 
-.brand-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 11px;
-  font-weight: bold;
-  color: #888888;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  margin-bottom: 12px;
-  background-color: #151515;
-  padding: 4px 10px;
-  border-radius: 20px;
-  border: 1px solid #2a2a2a;
-}
-
-.brand-badge .dot {
-  width: 6px;
-  height: 6px;
-  background-color: #aaaaaa;
-  border-radius: 50%;
-}
-
-.login-header h2 {
-  color: #ffffff;
-  font-size: 22px;
-  margin-bottom: 6px;
-}
-
-.login-header p {
-  color: #888888;
-  font-size: 13px;
-}
-
-/* Formulario y campos de texto */
-.login-form {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-}
-
+/* Separa verticalmente cada campo de texto */
 .form-group {
+  margin-bottom: 1.25rem;
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  text-align: left;
 }
 
 .form-group label {
-  color: #cccccc;
-  font-size: 13px;
-  font-weight: bold;
+  margin-bottom: 0.5rem;
+  color: #a0a0a0; /* Gris medio para las etiquetas */
+  font-size: 0.9rem;
+  font-weight: 600;
 }
 
-.label-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.forgot-link {
-  color: #888888;
-  font-size: 12px;
-  text-decoration: none;
-}
-
-.forgot-link:hover {
-  color: #cccccc;
-  text-decoration: underline;
-}
-
+/* Campos de entrada en escala de grises */
 .form-group input {
+  padding: 0.75rem;
   background-color: #121212;
+  color: #ffffff;
   border: 1px solid #333333;
   border-radius: 6px;
-  padding: 12px;
-  color: #ffffff;
-  font-size: 14px;
-  outline: none;
-  transition: border-color 0.2s;
+  font-size: 1rem;
+  transition: all 0.2s ease-in-out;
 }
 
-.form-group input:focus {
-  border-color: #666666;
-}
-
+/* Texto de sugerencia (placeholder) */
 .form-group input::placeholder {
-  color: #555555;
+  color: #666666;
 }
 
-/* Checkbox de recordar contraseña */
-.form-options {
-  display: flex;
-  align-items: center;
+/* Resaltado en gris claro/blanco cuando el campo está activo */
+.form-group input:focus {
+  outline: none;
+  border-color: #777777;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
 }
 
-.checkbox-container {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  color: #888888;
-  font-size: 13px;
-  cursor: pointer;
-}
-
-.checkbox-container input {
-  accent-color: #555555;
-  cursor: pointer;
-}
-
-/* Botón de envío */
+/* Botón principal en tono gris oscuro metálico */
+button[type="submit"],
 .btn-login {
-  background-color: #333333;
-  color: #ffffff;
-  border: none;
+  width: 100%;
+  padding: 0.75rem;
+  background-color: #2a2a2a; /* Gris oscuro */
+  color: #f0f0f0;            /* Texto gris muy claro */
+  border: 1px solid #3a3a3a;  /* Borde tenue de definición */
   border-radius: 6px;
-  padding: 12px;
-  font-size: 14px;
+  font-size: 1rem;
   font-weight: bold;
   cursor: pointer;
-  margin-top: 5px;
-  transition: background-color 0.2s;
+  transition: all 0.2s ease;
+  margin-top: 0.5rem;
 }
 
+/* Interacción con el botón en tonos de gris */
+button[type="submit"]:hover,
 .btn-login:hover {
-  background-color: #444444;
-}
-
-/* Pie de la tarjeta */
-.login-footer {
-  margin-top: 25px;
-  padding-top: 20px;
-  border-top: 1px solid #282828;
-  text-align: center;
-}
-
-.login-footer p {
-  color: #888888;
-  font-size: 13px;
-}
-
-.login-footer a {
+  background-color: #3f3f3f; /* Gris más claro al pasar el cursor */
+  border-color: #555555;
   color: #ffffff;
-  text-decoration: none;
-  font-weight: bold;
 }
 
-.login-footer a:hover {
-  text-decoration: underline;
+button[type="submit"]:active,
+.btn-login:active {
+  background-color: #222222; /* Se oscurece ligeramente al presionar */
+  transform: scale(0.98);
 }
