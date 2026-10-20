@@ -20,7 +20,7 @@ const controladorUsuario = {
                 const nuevoUsuario = new modeloUsuarios ({
                     nombre: req.body.nombre,
                     correo: req.body.correo,
-                    imagen: req.file ? req.file.filename : null,
+                    imagen: req.file,
                     contrasena: contrasenaHash,
                     rol: req.body.rol
                 });
@@ -43,7 +43,7 @@ const controladorUsuario = {
         try {
             const usuario = await modeloUsuarios.find();
             res.status(200).json({
-                mensaje: 'usuarioencontrado exitosamente',
+                mensaje: 'usuario encontrado exitosamente',
                 datos: usuario
             });
         } catch (error) {
@@ -76,7 +76,7 @@ const controladorUsuario = {
         try {
             uploadImage(req, res, async (error) => {
                 if (error) {
-                    return res.status(400).json({ mensaje: 'eror actaulizando el usuario, verifique', datos: error});
+                    return res.status(400).json({ mensaje: 'error actaulizando el usuario, verifique', datos: error});
                 }
 
                 const usuarioExistente = await modeloUsuarios.findById(req.params.id);
