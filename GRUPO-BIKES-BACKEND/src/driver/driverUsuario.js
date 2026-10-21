@@ -18,11 +18,11 @@ const controladorUsuario = {
                 console.log('Keys:', Object.keys(req.body));
                 const contrasenaHash = await bcrypt.hash(req.body.contrasena, 10);
                 const nuevoUsuario = new modeloUsuarios ({
-                    nombre: req.body.nombre,
+                    nombre: req.body.nombre, 
                     correo: req.body.correo,
-                    imagen: req.file,
+                    imagen: req.body.file,
                     contrasena: contrasenaHash,
-                    rol: req.body.rol
+                    rol: req.body.rol || 'usuario'
                 });
 
                 const guardarUsuario = await nuevoUsuario.save();

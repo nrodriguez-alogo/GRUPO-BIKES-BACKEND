@@ -5,7 +5,20 @@ const esquemaUsuarios = new Schema({
     correo: { type: String, required: true, trim: true, match: [/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,8}$/, "correo invalido"] },
     imagen: { type: String, required: false },
     contrasena: { type: String, required: true, trim: true, match: [/^(?=.*[a-zA-Z0-9!@#$%^&*()_\-+={}[\]|\\:;"'<>,.?/~`])\S+$/, 'contrasena invalida'] },
-    rol: { type: String, required: true, enum:['administrador', 'usuario'], default:'usuario', set:v => (!v || v.trim() === '' ? 'usuario':v)}
+    rol: { type: String,
+        enum:['usuario', 'administrador'],
+        default:'usuario', 
+        set:v =>{
+            //Roles permitidos
+            const rolesValidos = ['usuario', 'administrador'];
+
+            //Condicional si no tiene valor, está vacío o tiene un valor no permitido como "administrador", asigna "usuario"
+            if (!v || typeof v !== 'string' || v.trim() === '' || !rolesValidos.includes(v)){
+                return 'usuario';
+            }
+            return v; //Retorna administrado o usuario.
+        }
+    }
 });
 
 export default model('usuarios', esquemaUsuarios);

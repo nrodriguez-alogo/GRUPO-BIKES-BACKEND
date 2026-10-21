@@ -6,13 +6,7 @@ const controladorLogin = {
     login: async(req, res)=>{
         try {
 /*revisar nombre de usuario*/const{username, contrasena}=req.body;
-console.log('1. Entró al login');
 const encontrarUsuario = await modeloUsuarios.findOne({correo:username})
-.select('+contrasena');
-
-console.log('3. Usuario encontrado:', encontrarUsuario.contrasena);
-console.log('data (Postman):', contrasena);
-console.log('hash (MongoDB):', encontrarUsuario.contrasena);
 
 const validacionContrasena = await bcrypt.compare(contrasena, encontrarUsuario.contrasena);
 if (validacionContrasena){
@@ -26,6 +20,7 @@ if (validacionContrasena){
         res.json({
             mensaje: `Bienvenido ${encontrarUsuario.nombre}`,
             datos: token,
+            resultado: 'bien'
         });
     }
      else {res.json({mensaje:'Contrasena o usuario incorrecto',

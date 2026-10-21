@@ -15,6 +15,7 @@ import { response } from 'express';
   styleUrl: './login.css',
 })
 export class Login {
+  router = inject(Router);
   loginService: LoginService = inject(LoginService);
   CredentialsForm = new FormGroup({
     username: new FormControl('', Validators. required),
@@ -36,10 +37,24 @@ export class Login {
   // console.log(credential);
  this.loginService.login(credential).subscribe((response: any)=> {
      console.log("response: ", response);
-})
+    if(response.resultado === 'bien'){
+      localStorage.setItem('token', response.datos);
+      const decoded: any = this.loginService.decodeToken(response.datos)
+      console.log('Token decodificado', decoded);
+      if(decoded.rol === 'administrador'){
+        this.router.navigateByUrl('/administrador');//Crear ruta del administrador
+        } else{
+          alert("Redirigiendo al home");
+          this.router.navigateByUrl('/home');
+        }          
+      }else{
+       console.log('No funcionó');
+     }
+      
+});
 
-//     } else {
-// console.log('Error, formulario invalido');
+} else {
+ console.log('Error, formulario invalido');
     }
 }
 }
