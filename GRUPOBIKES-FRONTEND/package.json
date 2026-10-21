@@ -25,6 +25,7 @@
     "cors": "^2.8.6",
     "express": "^5.1.0",
     "install.js": "^1.0.1",
+    "jwt-decode": "^4.0.0",
     "ngx-toastr": "^20.0.5",
     "node": "^22.23.3",
     "node-gyp": "^13.0.2",
