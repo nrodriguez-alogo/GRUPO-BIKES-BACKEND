@@ -8,6 +8,7 @@ import { Registro } from './componentes/registro/registro';
 import { Usuarios } from './componentes/usuarios/usuarios';
 import { PageNotFound } from './componentes/page-not-found/page-not-found';
 import { Administrador } from './componentes/administrador/administrador';
+import { authGuard } from './guards/auth-guard';
 
 export const routes: Routes = [
 
@@ -18,7 +19,7 @@ export const routes: Routes = [
   { path: 'productos', title: 'Productos', component: Productos },
   { path: 'registro', title: 'Registro', component: Registro },
   { path: 'usuarios', title: 'Usuarios', component: Usuarios },
-  {path: 'administrador', title: 'Administrador', component: Administrador},
+  {path: 'administrador', title: 'Administrador', component: Administrador, canActivate:[authGuard]},
   {path: '', redirectTo: 'home', pathMatch: 'full'},
   {path: '**',title: '404 - Página no encontrada',component: PageNotFound}
 ];

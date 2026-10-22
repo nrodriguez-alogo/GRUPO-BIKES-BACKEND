@@ -23,6 +23,4 @@ export class Navegacion {
        localStorage.removeItem('token'); //Eliminar token de la sesión
        this.router.navigate(['/login']);//Regirigir al login
    }
-
-
 }
