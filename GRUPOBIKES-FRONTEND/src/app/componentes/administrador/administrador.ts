@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-administrador',
@@ -6,4 +8,11 @@ import { Component } from '@angular/core';
   templateUrl: './administrador.html',
   styleUrl: './administrador.css',
 })
-export class Administrador {}
+export class Administrador {
+  private router = inject(Router);
+
+  logout(){
+       localStorage.removeItem('token'); //Eliminar token de la sesión
+       this.router.navigate(['/login']);//Regirigir al login
+   }
+}
