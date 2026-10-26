@@ -4,6 +4,8 @@ import { uploadImage } from '../middlewares/resources.js';
 import fs from 'fs';
 import path from 'path';
 import bcrypt from "bcrypt";
+import crypto from 'node:crypto';
+import nodemailer from 'nodemailer';
 
 const controladorUsuario = {
     crearUsuario: async (req, res) => {
@@ -148,5 +150,58 @@ const controladorUsuario = {
         }
     }
 };
+
+function generarContrasenaAleatoria(){
+    return crypto.randomBytes(6).toString('hex'); //La función "ramdomBytes" genera un dato aleatorio. Cuántos datos?
+}
+
+export const olvidarContrasena = async (req, res)=> {
+    try {
+        //Enviar solicitud para verificar si el correo ya existe en la base de datos
+        const {correo} = req.body;
+        const user = await modeloUsuarios.findOne({correo});
+        if(!user){
+            res.json({
+            resultado:'mistake',
+            mensaje: 'El correo ingresado no se encuentra en la base de datos',
+            data: null
+            });
+        }
+        //Generar clave temporal y encriptada
+        const newContra = generarContrasenaAleatoria();
+        const hashContrasena = await bcrypt.hash(newContra, 10);
+        user.contrasena = hashContrasena;
+        await user.save();//Se guarda la clave encriptada directamente en la bese de datos
+        //Realizar la configuración del servicio del correo
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth:{
+                user: process.env.EMAIL_NODE,
+                pass: process.env.PASS_NODE,
+            }
+                        
+        });
+        //Configurar contendio del correo
+        const mailOptions = {
+            from: process.env.EMAIL_NODE,
+            to: correo,  //email que puso el usuario
+            subject: 'Recuperación de contraseña',
+            text: `Hola ${user.name}, \n\n Tu nueva contraseña temporal es: ${newContra}\n\nRecuerda actualizar tú contraseña en tú perfil por seguridad.\n\nSaludos desde el área de soporte` //Lo que el usuari ve
+        }
+
+        await transporter.sendMail(mailOptions);
+        res.json({
+            resultado:'fine',
+            mensaje: 'Se ha enviado una nueva contraseña al correo registrado',
+            });
+         
+    } catch (error) {
+        console.log('Error al generar contraseña')
+        res.json({
+            resultado:'mistake',
+            mensaje: 'Error interno en el servidor', error: error.mensaje,
+            });
+    }
+}
 
 export default controladorUsuario;
