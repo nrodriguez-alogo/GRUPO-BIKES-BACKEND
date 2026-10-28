@@ -6,9 +6,11 @@ import { Marcas } from './componentes/marcas/marcas';
 import { Productos } from './componentes/productos/productos';
 import { Registro } from './componentes/registro/registro';
 import { Usuarios } from './componentes/usuarios/usuarios';
-import { PageNotFound } from './componentes/page-not-found/page-not-found';
 import { Administrador } from './componentes/administrador/administrador';
 import { authGuard } from './guards/auth-guard';
+import { Recover } from './componentes/recover/recover';
+import { PageNotFound } from './componentes/page-not-found/page-not-found';
+
 
 export const routes: Routes = [
 
@@ -19,7 +21,8 @@ export const routes: Routes = [
   { path: 'productos', title: 'Productos', component: Productos },
   { path: 'registro', title: 'Registro', component: Registro },
   { path: 'usuarios', title: 'Usuarios', component: Usuarios },
-  {path: 'administrador', title: 'Administrador', component: Administrador, canActivate:[authGuard]},
-  {path: '', redirectTo: 'home', pathMatch: 'full'},
-  {path: '**',title: '404 - Página no encontrada',component: PageNotFound}
+  { path: 'administrador', title: 'Administrador', component: Administrador, canActivate:[authGuard]},
+  { path: 'recover', title: 'Recover', component: Recover },
+  { path: '', redirectTo: 'home', pathMatch: 'full'},
+  { path: '**',title: '404 - Página no encontrada',component: PageNotFound}
 ];
