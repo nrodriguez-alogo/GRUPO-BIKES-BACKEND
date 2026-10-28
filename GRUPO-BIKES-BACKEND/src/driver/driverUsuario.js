@@ -1,4 +1,3 @@
-import { request } from 'express';
 import modeloUsuarios from '../modelos/modeloUsuarios.js';
 import { uploadImage } from '../middlewares/resources.js';
 import fs from 'fs';

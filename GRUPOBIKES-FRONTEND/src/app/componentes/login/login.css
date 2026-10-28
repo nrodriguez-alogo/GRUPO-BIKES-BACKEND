@@ -92,3 +92,34 @@ button[type="submit"]:active,
   background-color: #222222; /* Se oscurece ligeramente al presionar */
   transform: scale(0.98);
 }
+
+/* Botón de recuperar contraseña */
+/* Botón principal en tono gris oscuro metálico */
+button[type="button"],
+.btn-login {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: #2a2a2a; /* Gris oscuro */
+  color: #f0f0f0;            /* Texto gris muy claro */
+  border: 1px solid #3a3a3a;  /* Borde tenue de definición */
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 0.5rem;
+}
+
+/* Interacción con el botón en tonos de gris */
+button[type="button"]:hover,
+.btn-login:hover {
+  background-color: #3f3f3f; /* Gris más claro al pasar el cursor */
+  border-color: #555555;
+  color: #ffffff;
+}
+
+button[type="button"]:active,
+.btn-login:active {
+  background-color: #222222; /* Se oscurece ligeramente al presionar */
+  transform: scale(0.98);
+}

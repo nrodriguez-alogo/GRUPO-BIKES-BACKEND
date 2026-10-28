@@ -6,7 +6,8 @@ const controladorLogin = {
     login: async(req, res)=>{
         try {
 /*revisar nombre de usuario*/const{username, contrasena}=req.body;
-const encontrarUsuario = await modeloUsuarios.findOne({correo:username})
+const encontrarUsuario = await modeloUsuarios.findOne({correo:username});
+
 
 const validacionContrasena = await bcrypt.compare(contrasena, encontrarUsuario.contrasena);
 if (validacionContrasena){
