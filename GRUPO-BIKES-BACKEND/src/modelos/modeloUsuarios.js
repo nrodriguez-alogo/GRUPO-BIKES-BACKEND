@@ -3,7 +3,7 @@ import { Schema, model } from "mongoose";
 const esquemaUsuarios = new Schema({
     nombre: { type: String, required: true, trim: true },
     correo: { type: String, required: true, trim: true, match: [/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,8}$/, "correo invalido"] },
-    imagen: { type: String, required: false },
+    imagen: { type: String, required: false, default: 'imagenes/usuarios/default-user.svg' },
     contrasena: { type: String, required: true, trim: true, match: [/^(?=.*[a-zA-Z0-9!@#$%^&*()_\-+={}[\]|\\:;"'<>,.?/~`])\S+$/, 'contrasena invalida'] },
     rol: { type: String,
         enum:['usuario', 'administrador'],

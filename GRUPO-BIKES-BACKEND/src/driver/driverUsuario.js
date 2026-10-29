@@ -6,6 +6,8 @@ import bcrypt from "bcrypt";
 import crypto from 'node:crypto';
 import nodemailer from 'nodemailer';
 
+const DEFAULT_IMAGE = 'imagenes/usuarios/default-user.svg';
+
 const controladorUsuario = {
     crearUsuario: async (req, res) => {
         try {
@@ -18,10 +20,12 @@ const controladorUsuario = {
                 }
                 console.log('Keys:', Object.keys(req.body));
                 const contrasenaHash = await bcrypt.hash(req.body.contrasena, 10);
+                const rutaImagen = sol.file ? `iamgenes/usuarios/${sol.file.filename}`: DEFAULT_IMAGE;
+        
                 const nuevoUsuario = new modeloUsuarios ({
                     nombre: req.body.nombre, 
                     correo: req.body.correo,
-                    imagen: req.body.file,
+                    imagen: req.body.file || rutaImagen,
                     contrasena: contrasenaHash,
                     rol: req.body.rol || 'usuario'
                 });
@@ -34,6 +38,9 @@ const controladorUsuario = {
                 });
             });
         } catch (error) {
+            if (sol.file && fs.existsSync(`imagnees/usuarios/${sol.file.filename}`)) {
+                fs.unlinkSync(`imagenes/usuarios/${sol.file.filename}`);
+            }
             res.status(500).json({
                 mensaje: 'ocurrio error creando el usuario',
                 datos: error.message
@@ -130,8 +137,7 @@ const controladorUsuario = {
             if (!usuarioBorrar) {
                 return res.status(404).json({mensaje: 'usuario no encontrado'});
             }
-
-            if (usuarioBorrar.imagen) {
+            if (usuarioBorrar.imagen && usuarioBorrar.imagen !== DEFAULT_IMAGE) {
                 const rutaImagen = path.join('imagen', usuarioBorrar.imagen);
                 if (fs.existsSync(rutaImagen)) {
                     fs.unlinkSync(rutaImagen);
