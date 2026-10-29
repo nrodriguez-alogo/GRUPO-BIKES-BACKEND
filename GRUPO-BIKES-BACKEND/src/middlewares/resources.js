@@ -1,6 +1,6 @@
 import multer from "multer";
 import path from "path";
-
+import fs from "fs";
 const storage = multer.diskStorage({   //constante para hacer la configuración de almacenamiento
     destination: 'imagenes',// Las propiedades se asignan con : y comillas simples para el destino
     filename: (req,file,callback)=>{
@@ -14,3 +14,21 @@ const storage = multer.diskStorage({   //constante para hacer la configuración 
 });
 
 export const uploadImage = multer({storage}).single('imagen'); //Constante para exportar el middleware
+const storageUsers = multer.diskStorage({
+    destination: (req, file, cb) => {
+        const dir = 'imagenes/usuarios';
+        if (!fs.existsSync(dir)){
+            fs.mkdirSync(dir, {recursive: true});
+        }
+        cb(null,dir);
+    },
+    filename: (file, cb) => {
+        const extension = path.extname(file.originalname);
+        const nameWithoutExt = path.basename(file.originalname, extension).replace(/\s+/g, '-').toLowerCase();
+        const timestamp = new Date().toISOString().replace(/[-:.TZ]/g, '');
+        const uniqueName = `user-${nameWithoutExt}${timestamp}${extension}`;
+        cb(null, uniqueName);
+    },
+});
+export const uploadSingleImage = multer({storage}).single('imagen');
+export const uploadUserImage = multer({ storage: storageUsers }).single('imagen');

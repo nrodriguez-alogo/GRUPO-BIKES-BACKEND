@@ -1,11 +1,12 @@
 import modeloUsuarios from "../modelos/modeloUsuarios.js";
 import { generarToken, verificarToken } from "../ayudas/funciones.js";
 import bcrypt from "bcrypt";
+import fs from "fs";
 
 const controladorLogin = {
     login: async(req, res)=>{
         try {
-/*revisar nombre de usuario*/const{username, contrasena}=req.body;
+const{username, contrasena}=req.body;
 const encontrarUsuario = await modeloUsuarios.findOne({correo:username});
 
 
@@ -16,7 +17,7 @@ if (validacionContrasena){
             id : encontrarUsuario._id,
             nombre: encontrarUsuario.nombre,
             imagen: encontrarUsuario.imagen,
-            rol: encontrarUsuario.rol, /* SE DEBE USAR EN POSTMAN "CORREO" y "CONTRASENA" */
+            rol: encontrarUsuario.rol, /* SE DEBE USAR EN POSTMAN "USERNAME" y "CONTRASENA" */
         });
         res.json({
             mensaje: `Bienvenido ${encontrarUsuario.nombre}`,
@@ -52,6 +53,7 @@ validarToken: async (req, res) =>{
             datos: error.message,
         });
     }
+    },
 }
-}
+
 export default controladorLogin;
