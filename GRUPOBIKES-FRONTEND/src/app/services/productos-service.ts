@@ -1,9 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
-import { productos, ApiProductos } from '../interfaces/productos';
-import { response } from 'express';
-import { Productos } from '../componentes/productos/productos';
+import { Productos, ApiProductos } from '../interfaces/productos';
+
 
 @Injectable({
   providedIn: 'root',
@@ -12,7 +11,7 @@ export class ProductosService {
   private http = inject(HttpClient);
   private API_URL = 'http://localhost:3002/productos';
 
-  getAll(): Observable<productos[]>{
+  getAll(): Observable<Productos[]>{
     return this.http.get<ApiProductos>(this.API_URL).pipe(map(resp=>resp.data)
   );
   }

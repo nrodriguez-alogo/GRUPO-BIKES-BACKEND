@@ -1,4 +1,4 @@
-export interface productos {
+export interface Productos {
 //Agregar id. Para consultar los datos del productoi registrado en la base de datos
  _id?: string;
  marca: string;
@@ -15,7 +15,7 @@ export interface productos {
 export interface ApiProductos{
     resultado: string;
     mensaje: string;
-    data: productos[];
+    data: Productos[];
 }
 
 
