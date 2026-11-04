@@ -4,10 +4,6 @@ import { Credential } from '../../interfaces/credential';
 import { ReactiveFormsModule, FormControl, FormGroup, Validators } from '@angular/forms';
 import { LoginService } from '../../services/login-service';
 
-
-
-
-
 @Component({
   selector: 'app-login',
   imports: [ReactiveFormsModule, RouterLink],
@@ -41,6 +37,7 @@ export class Login {
       localStorage.setItem('token', response.datos);
       const decoded: any = this.loginService.decodeToken(response.datos)
       console.log('Token decodificado', decoded);
+      alert(response.message);
       if(decoded.rol === 'administrador'){
         this.router.navigateByUrl('/administrador');//Crear ruta del administrador
         } else{
