@@ -8,7 +8,7 @@ import { ServerResponse } from '../interfaces/user';
 })
 export class UserService {
   private httpClient = inject(HttpClient);
-  private apiUrl = 'http://localhost:3000/users';
+  private apiUrl = 'http://localhost:3002/usuarios';
   registerUser(formData: FormData): Observable<ServerResponse> {
     return this.httpClient.post<ServerResponse>(this.apiUrl, formData);
   }

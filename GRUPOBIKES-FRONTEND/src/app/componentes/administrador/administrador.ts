@@ -12,10 +12,42 @@ import { UserService } from '../../services/user-service';
 export class Administrador implements OnInit{
   private router = inject(Router);
   adminName = signal<string>('Administrador');
-  adminImage = signal<string>('http://localhost:3000/imagenes/usuarios/default-user.svg');
+  adminImage = signal<string>('http://localhost:3002/imagenes/usuarios/default-user.svg');
   ngOnInit(): void {
-    this.loadAdminData(): void;
+    this.loadAdminData(); 
   }
+  loadAdminData(): void {
+    const token = localStorage.getItem('token');
+    if (token) {
+      try {
+        const decoded: any = jwtDecode(token);
+        console.log("Token decodificado en admin: ", decoded);
+        if (decoded.nombre {
+          this.adminName.set(decoded.nombre);
+        }
+        if(decoded.imagen) {
+          const imageUrl =`http://localhost:3002/${decoded.imagen}`;
+          this,this.adminImage.set(imageUrl);
+        }
+        if (decoded.id) {
+          this.userService.getUserById(decoded.id).subscribe({
+            next: (response) => {
+              if (response.mensaje === 'bien' && response.datos.nombre){
+                this.adminName.set(response.datos.nombre);
+                if (response.datos.imagen) {
+                  this.adminImage.set(`http://localhost:3002/${response.datos.imagen}`);
+                }
+            }
+          },
+        error: (err) => console.error('Error al obtener datos el admin: ', err)
+        });
+        }
+      }catch (error) {
+        console.error("Error al decodificar el token: ", error);
+      }
+    }
+  }
+
   private userService = inject(UserService);
 
   logout(){

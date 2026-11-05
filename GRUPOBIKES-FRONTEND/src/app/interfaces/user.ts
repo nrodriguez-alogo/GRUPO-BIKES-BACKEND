@@ -2,13 +2,12 @@ export interface User {
 _id?: string;
 nombre: string;
 correo: string;
-contraseña: string;
 imagen: string;
-rol: 'user' | 'administrador';
+contrasena: string;
+rol: 'usuario' | 'administrador';
 }
 
 export interface ServerResponse {
-    result: string;
-    message: string;
-    data: User | any;
+    mensaje: string;
+    datos: User | any;
 }
