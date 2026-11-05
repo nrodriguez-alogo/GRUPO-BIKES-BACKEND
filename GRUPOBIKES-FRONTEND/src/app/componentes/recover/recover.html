@@ -1,0 +1,15 @@
+<p>recover works!</p>
+<form [formGroup]="recoverForm" (ngSubmit)="handleRecover()">
+  <div class="mb-3">
+    <label for="exampleInputEmail1" class="form-label">Email address</label>
+    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" formControlName="correo">
+  </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+<!-- Decorador -->
+ @if (mensaje()){
+    <div class="alert alert-info mt-3">
+        {{ mensaje() }}
+    </div>
+ }

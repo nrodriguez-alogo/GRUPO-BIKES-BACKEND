@@ -1,0 +1,125 @@
+<header class="header-container">
+  <div class="header-top">
+
+    <!-- Logo y Nombre -->
+    <a class="brand-box" routerLink="/home">
+      <img src="moto1.png" alt="Logo Grupo Bikes" class="logo-img">
+      <h1 class="brand-title">Grupo Bikes</h1>
+    </a>
+
+    <!-- Barra de búsqueda -->
+    <div class="search-box">
+      <input type="text" placeholder="¿Qué buscas?" class="search-input">
+      <span class="material-symbols-outlined search-icon">search</span>
+    </div>
+
+    <!-- Acciones de usuario y carrito -->
+    <div class="actions-box">
+      <a class="cart-info" routerLink="/productos">
+        <span>Mi carrito</span>
+        <span class="material-symbols-outlined">shopping_cart</span>
+        <span class="cart-count">{{ cantidadTotal }}</span>
+      </a>
+
+      <div class="total-info">
+        Total: ${{ totalCost | number:'1.2-2' }}
+      </div>
+      
+      <div class="container mt-5" style="max-width: 500px;">
+        <h2 class="mb-4 text-center">Crear cuenta</h2>
+        <div class = "text-center mb-4">
+          @if (imagePreview()){
+            <img [src]="imagePreview()"
+                 alt="Vista previa"
+                 class = "rounded-circle border border-2 border-secondary object-fit-cover"
+                 style="width: 110px; height: 110px;">
+          } @else {
+            <svg xmlns="http://www.w3.org.2000/svg" viewBox="0 0 200 200" width="110" height="110" class="rounded-circle">
+              <circle cx="100" cy="100" r="95" fill="#e4e6eb" stroke="#bec3c9" stroke-width="4"/>
+              <circle cx="100" cy="75" r="35" fill="#8d949e"/>
+              <path d="M 40 175 C 40 130, 160 130, 160 175" fill="#8d949e"/>
+            </svg>
+          }
+        </div>
+        <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+          
+        <div class="mb-3">
+          <label for="inputName" class="form-label">Name</label>
+          <input
+            type="text"
+            class="form-control"
+            id="inputName"
+            formControlName="name"
+            placeholder="Tu nombre completo">
+          <div id="nameHelp" class="form-text">We'll never share your name with anyone else.</div>
+        </div>
+
+        <div class="mb-3">
+          <label for="inputEmail" class="form-label">Email address</label>
+          <input
+            type="email"
+            class="form-control"
+            id="inputEmail"
+            formControlName="email"
+            placeholder="ejemplo@correo.com">
+          <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+        </div>
+
+        <div class="mb-3">
+          <label for="inputPassword" class="form-label">Password</label>
+          <input
+            type="password"
+            class="form-control"
+            id="inputPassword"
+            formControlName="password"
+            placeholder="8 a 15 caracteres (Mayúscula, número y símbolo)">
+        </div>
+
+        <div class="mb-3">
+          <label for="inputRol" class="form-label">Rol (Opcional)</label>
+          <select class="form-select" id="inputRol" formControlName="rol">
+            <option value="">Seleccionar rol (Por defecto: user)</option>
+            <option value="user">Usuario (user)</option>
+            <option value="admin">Administrador (admin)</option>
+          </select>
+          <div class="form-text">Si no seleccionas ninguno, serás registrado como 'user'.</div>
+        </div>
+
+        <div class="mb-3">
+          <label for="formFile" class="form-label">Foto de perfil (Opcional)</label>
+          <input
+            class="form-control"
+            type="file"
+            id="formFile"
+            accept="image/*"
+            (change)="onFileSelected($event)">
+          <div class="form-text">Si no cargas una foto, se asignará el avatar por defecto.</div>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100">Registrarse</button>
+        </form>
+      </div>
+
+      <a class="login-btn" routerLink="/login">
+        <span>Iniciar sesión</span>
+        <span class="material-symbols-outlined">account_circle</span>
+      </a>
+      <button (click)="logout()" class="btn btn-danger">logout</button>
+    </div>
+  </div>
+
+  <!-- Navegación -->
+  <nav class="nav-bar">
+    <a routerLink="/home"
+       class="nav-link">Inicio</a>
+
+    <a routerLink="/productos"
+       class="nav-link">Productos</a>
+
+    <a routerLink="/marcas"
+       class="nav-link">Marcas</a>
+
+    <a routerLink="/anuncios"
+       class="nav-link">Noticias</a>
+  </nav>
+</header>
