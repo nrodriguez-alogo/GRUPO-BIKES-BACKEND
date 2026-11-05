@@ -17,9 +17,9 @@ export class Registro {
   selectedFile = signal<File | null>(null);
   imagePreview = signal<string | null>(null);
   registerForm = this.fb.nonNullable.group({
-    name: ['', [Validators.required]],
-    email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required]],
+    nombre: ['', [Validators.required]],
+    correo: ['', [Validators.required, Validators.email]],
+    contrasena: ['', [Validators.required]],
     rol: [''] //Opcional, nunca inicia vacio y no lleva validators
   });
 
@@ -46,9 +46,9 @@ export class Registro {
     }
     const datos = this.registerForm.getRawValue();
     const formData = new FormData();
-    formData.append('name', datos.name);
-    formData.append('email', datos.email);
-    formData.append('password', datos.password);
+    formData.append('nombre', datos.nombre);
+    formData.append('correo', datos.correo);
+    formData.append('contrasena', datos.contrasena);
     if (datos.rol) {
       formData.append('rol', datos.rol);
     }
@@ -60,17 +60,17 @@ export class Registro {
     this.userService.registerUser(formData)
     .subscribe({
       next: (response) => {
-        console.log('Respuesta deñ servidor:', response);
-        if (response.result === 'bien'){
+        console.log('Respuesta del servidor:', response);
+        if (response.mensaje === 'bien'){
           alert('¡Usuario registrado con éxito!');
           this.router.navigate(['/login']);
         }else {
-          alert('No se pudo registrar: ' + response.message);
+          alert('No se pudo registrar: ' + response.mensaje);
         }
       },
       error: (err) => {
         console.error('Error de red o del servidor: ', err);
-        alert('Ocurrió un error en el servidor al intentr registrar el usuario');
+        alert('Ocurrió un error en el servidor al intentar registrar el usuario');
       }
     });
   }

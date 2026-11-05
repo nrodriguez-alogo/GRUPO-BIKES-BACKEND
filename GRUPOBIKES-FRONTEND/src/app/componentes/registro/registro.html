@@ -1,21 +1,75 @@
-<form>
-    <div class="mb-3">
-    <label nom="nombreRegistro" class="form-label">Nombre</label>
-    <input type="text" class="form-control" id="nombreRegistro" placeholder="ej: Juan Pérez">
-  </div>
-  <div class="mb-3">
-    <label for="exampleInputEmail1" class="form-label">Correo</label>
-    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="ejemplo@.com" required>
-    <div id="emailHelp" class="form-text">Nunca compartiresmos tus datos con alguien más.</div>
-  </div>
-  <div class="mb-3">
-    <label for="exampleInputPassword1" class="form-label">Contraseña</label>
-    <input type="password" class="form-control" id="exampleInputPassword1">
-  </div>
-  <div class="mb-3">
-    <label for="exampleInputPassword1" class="form-label">Imagen</label>
-    <input type="password" class="form-control" id="exampleInputPassword1">
-  </div>
-  
-  <button type="submit" class="btn btn-primary">Registrar</button>
-</form>
+      <div class="container mt-5" style="max-width: 500px;">
+        <h2 class="mb-4 text-center">Crear cuenta</h2>
+        <div class = "text-center mb-4">
+          @if (imagePreview()){
+            <img [src]="imagePreview()"
+                 alt="Vista previa"
+                 class = "rounded-circle border border-2 border-secondary object-fit-cover"
+                 style="width: 110px; height: 110px;">
+          } @else {
+            <svg xmlns="http://www.w3.org.2000/svg" viewBox="0 0 200 200" width="110" height="110" class="rounded-circle">
+              <circle cx="100" cy="100" r="95" fill="#e4e6eb" stroke="#bec3c9" stroke-width="4"/>
+              <circle cx="100" cy="75" r="35" fill="#8d949e"/>
+              <path d="M 40 175 C 40 130, 160 130, 160 175" fill="#8d949e"/>
+            </svg>
+          }
+        </div>
+        <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+          
+        <div class="mb-3">
+          <label for="inputName" class="form-label">Name</label>
+          <input
+            type="text"
+            class="form-control"
+            id="inputName"
+            formControlName="nombre"
+            placeholder="Tu nombre completo">
+          <div id="nameHelp" class="form-text">We'll never share your name with anyone else.</div>
+        </div>
+
+        <div class="mb-3">
+          <label for="inputEmail" class="form-label">Email address</label>
+          <input
+            type="email"
+            class="form-control"
+            id="inputEmail"
+            formControlName="correo"
+            placeholder="ejemplo@correo.com">
+          <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+        </div>
+
+        <div class="mb-3">
+          <label for="inputPassword" class="form-label">Password</label>
+          <input
+            type="password"
+            class="form-control"
+            id="inputPassword"
+            formControlName="contrasena"
+            placeholder="8 a 15 caracteres (Mayúscula, número y símbolo)">
+        </div>
+
+        <div class="mb-3">
+          <label for="inputRol" class="form-label">Rol (Opcional)</label>
+          <select class="form-select" id="inputRol" formControlName="rol">
+            <option value="">Seleccionar rol (Por defecto: user)</option>
+            <option value="usuario">Usuario (usuario)</option>
+            <option value="administrador">Administrador (admin)</option>
+          </select>
+          <div class="form-text">Si no seleccionas ninguno, serás registrado como 'user'.</div>
+        </div>
+
+        <div class="mb-3">
+          <label for="formFile" class="form-label">Foto de perfil (Opcional)</label>
+          <input
+            class="form-control"
+            type="file"
+            id="formFile"
+            accept="image/*"
+            (change)="onFileSelected($event)">
+          <div class="form-text">Si no cargas una foto, se asignará el avatar por defecto.</div>
+        </div>
+        <button type="submit" class="btn btn-primary w-100">Registrarse</button>
+        </form>
+      </div>
+
+

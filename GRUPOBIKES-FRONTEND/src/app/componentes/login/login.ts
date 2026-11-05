@@ -33,11 +33,12 @@ export class Login {
   // console.log(credential);
  this.loginService.login(credential).subscribe((response: any)=> {
      console.log("response: ", response);
-    if(response.resultado === 'bien'){
+    if(response.mensaje === 'bien'){
       localStorage.setItem('token', response.datos);
       const decoded: any = this.loginService.decodeToken(response.datos)
       console.log('Token decodificado', decoded);
-      alert(response.message);
+      console.log(response.mensaje);
+      alert(response.mensaje);
       if(decoded.rol === 'administrador'){
         this.router.navigateByUrl('/administrador');//Crear ruta del administrador
         } else{
