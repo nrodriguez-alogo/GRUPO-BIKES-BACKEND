@@ -15,7 +15,7 @@ export interface Productos {
 export interface ApiProductos{
     resultado: string;
     mensaje: string;
-    data: Productos[];
+    datos: Productos[];
 }
 
 
