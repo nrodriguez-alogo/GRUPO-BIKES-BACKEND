@@ -2,10 +2,11 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
 import { UserService } from '../../services/user-service';
+import { CrudProductos } from './crud-productos/crud-productos';
 
 @Component({
   selector: 'app-administrador',
-  imports: [],
+  imports: [CrudProductos],
   templateUrl: './administrador.html',
   styleUrl: './administrador.css',
 })
@@ -22,7 +23,7 @@ export class Administrador implements OnInit{
       try {
         const decoded: any = jwtDecode(token);
         console.log("Token decodificado en admin: ", decoded);
-        if (decoded.nombre {
+        if (decoded.nombre) {
           this.adminName.set(decoded.nombre);
         }
         if(decoded.imagen) {

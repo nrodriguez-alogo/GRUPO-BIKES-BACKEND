@@ -13,8 +13,9 @@ import { LoginService } from '../../services/login-service';
 export class Login {
   router = inject(Router);
   loginService: LoginService = inject(LoginService);
+  
   CredentialsForm = new FormGroup({
-    username: new FormControl('', Validators. required),
+    username: new FormControl('', Validators. required),//Revisar validator.email
     contrasena: new FormControl('', Validators. required),
   });
 
@@ -33,7 +34,7 @@ export class Login {
   // console.log(credential);
  this.loginService.login(credential).subscribe((response: any)=> {
      console.log("response: ", response);
-    if(response.mensaje === 'bien'){
+    if(response.resultado === 'bien'){
       localStorage.setItem('token', response.datos);
       const decoded: any = this.loginService.decodeToken(response.datos)
       console.log('Token decodificado', decoded);

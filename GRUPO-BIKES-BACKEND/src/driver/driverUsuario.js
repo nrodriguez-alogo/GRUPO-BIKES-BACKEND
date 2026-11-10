@@ -20,7 +20,7 @@ const controladorUsuario = {
                 }
                 console.log('Keys:', Object.keys(req.body));
                 const contrasenaHash = await bcrypt.hash(req.body.contrasena, 10);
-                const rutaImagen = sol.file ? `iamgenes/usuarios/${sol.file.filename}`: DEFAULT_IMAGE;
+                const rutaImagen = req.file ? `imagenes/usuarios/${req.file.filename}`: DEFAULT_IMAGE;
         
                 const nuevoUsuario = new modeloUsuarios ({
                     nombre: req.body.nombre, 
@@ -38,8 +38,8 @@ const controladorUsuario = {
                 });
             });
         } catch (error) {
-            if (sol.file && fs.existsSync(`imagnees/usuarios/${sol.file.filename}`)) {
-                fs.unlinkSync(`imagenes/usuarios/${sol.file.filename}`);
+            if (req.file && fs.existsSync(`imagenes/usuarios/${req.file.filename}`)) {
+                fs.unlinkSync(`imagenes/usuarios/${req.file.filename}`);
             }
             res.status(500).json({
                 mensaje: 'ocurrio error creando el usuario',
@@ -138,7 +138,7 @@ const controladorUsuario = {
                 return res.status(404).json({mensaje: 'usuario no encontrado'});
             }
             if (usuarioBorrar.imagen && usuarioBorrar.imagen !== DEFAULT_IMAGE) {
-                const rutaImagen = path.join('imagen', usuarioBorrar.imagen);
+                const rutaImagen = path.join('imagenes', usuarioBorrar.imagen);
                 if (fs.existsSync(rutaImagen)) {
                     fs.unlinkSync(rutaImagen);
                 }
@@ -166,7 +166,7 @@ export const olvidarContrasena = async (req, res)=> {
         const {correo} = req.body;
         const user = await modeloUsuarios.findOne({correo});
         if(!user){
-            res.json({
+            return res.json({
             resultado:'mistake',
             mensaje: 'El correo ingresado no se encuentra en la base de datos',
             data: null
@@ -191,7 +191,7 @@ export const olvidarContrasena = async (req, res)=> {
             from: process.env.EMAIL_NODE,
             to: correo,  //email que puso el usuario
             subject: 'Recuperación de contraseña',
-            text: `Hola ${user.name}, \n\n Tu nueva contraseña temporal es: ${newContra}\n\nRecuerda actualizar tú contraseña en tú perfil por seguridad.\n\nSaludos desde el área de soporte` //Lo que el usuari ve
+            text: `Hola ${user.nombre}, \n\n Tu nueva contraseña temporal es: ${newContra}\n\nRecuerda actualizar tú contraseña en tú perfil por seguridad.\n\nSaludos desde el área de soporte` //Lo que el usuari ve
         }
 
         await transporter.sendMail(mailOptions);
