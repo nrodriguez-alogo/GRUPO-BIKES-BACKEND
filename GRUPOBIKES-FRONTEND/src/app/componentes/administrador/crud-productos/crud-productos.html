@@ -43,10 +43,49 @@
                 <label class="form-label">Marca:</label>
                 <input type="text" class="form.control" [(ngModel)]="productoForm.marca" name="marca" required/>                
             </div>
-            <div>
-                <button type="submit" class="btn btn-primary">{{ modo() === 'crear' ? 'crearProducto' : 'Actualizar Producto'}}</button>
+            <div class="mt-2 d-flex gap-2">
+                <button type="submit" class="btn btn-primary">{{ modo() === 'crear' ? 'Crear producto' : 'Actualizar producto'}}</button>
                 <button type="button" class="btn btn-secondary" (click)= "cancelarFormulario()">Cancelar</button>
             </div>
         </form>
     </div>
+}
+@if (productos().length === 0) {
+    <p class="mt-4 text-muted">No hay productos disponibles.</p>
+}@else {
+    <table class="table table-striped mt-4 align-middle">
+        <thead>
+            <tr>
+                <th>Modelo</th>
+                <th>Descripción</th>
+                <th>Imagen</th>
+                <th>Color</th>
+                <th>Categoría</th>
+                <th>Precio</th>
+                <th>Estado</th>
+                <th>Cilindraje</th>
+                <th>Marca</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (prod of productos(); track prod._id) {
+                <tr>
+                    <td>
+                        <img [src]="imagenBaseURL + prod.imagen" width="80" class="rounded" alt="Producto" />
+                    </td>
+                    <td>{{ prod.modelo}}</td>
+                    <td>{{ prod.descripcion}}</td>
+                    <td>{{ prod.imagen}}</td>
+                    <td>{{ prod.color}}</td>
+                    <td><span class="badge bg-secondary">{{ prod.categoria}}</span></td>
+                    <td>${{ prod.precio}}</td>
+                    <td>{{ prod.estado}}</td>
+                    <td>{{ prod.cilindraje}}</td>
+                    <td>{{ prod.marca}}</td>
+                    <td><button class="btn btn-warning me-2" (click)="seleccionarParaEditar (prod)">Editar</button>
+                    <button class="btn btn-danger" (click)="eliminarProducto (prod._id!)">Eliminar</button>
+                </tr>
+            }
+        </tbody>
+    </table>
 }
