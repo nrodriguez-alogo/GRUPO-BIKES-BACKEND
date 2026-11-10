@@ -2,7 +2,6 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ProductosService } from '../../../services/productos-service';
 import {Productos} from '../../../interfaces/productos'
-import { nextTick } from 'process';
 
 
 @Component({
@@ -17,7 +16,7 @@ export class CrudProductos {
   mostrarFormulario = signal<boolean>(false);
   modo = signal <'crear' | 'editar'>('crear');
   selectedFile = signal<File | null>(null);
-  imagenBaseURL = 'http://localhost:3002/imagenes';
+  imagenBaseURL = 'http://localhost:3002/imagenes/';
   productoForm: Productos = this.resetProducto();
   
 
@@ -49,6 +48,7 @@ export class CrudProductos {
     }
     //Constante para enviar los archivos físicos junto con el texto por el HTTP
     const formData= new FormData();
+    formData.append('marca', this.productoForm.marca);
     formData.append('modelo', this.productoForm.modelo);
     formData.append('descripcion', this.productoForm.descripcion);
     formData.append('imagen', file);
@@ -57,7 +57,6 @@ export class CrudProductos {
     formData.append('precio', this.productoForm.precio.toString());
     formData.append('estado', this.productoForm.estado);
     formData.append('cilindraje', this.productoForm.cilindraje.toString());
-    formData.append('marca', this.productoForm.marca);
     this.productosService.crear(formData).subscribe({
     next: () =>{
       alert('Producto creado correctamente');
@@ -79,7 +78,6 @@ export class CrudProductos {
     const formData = new FormData();
     formData.append('modelo', this.productoForm.modelo);
     formData.append('descripcion', this.productoForm.descripcion);
-    
     formData.append('color', this.productoForm.color);
     formData.append('categoria', this.productoForm.categoria);
     formData.append('precio', this.productoForm.precio.toString());
@@ -116,11 +114,9 @@ export class CrudProductos {
 
   }
 
-  
-
-
   resetProducto(): Productos{
     return{
+      marca: '',
       modelo: '',
       descripcion: '',
       imagen: '',
@@ -128,8 +124,7 @@ export class CrudProductos {
       categoria: '',
       precio: 0,
       estado: '',
-      cilindraje: 0,
-      marca: '',
+      cilindraje: 0
     };
   }
   prepararCrear(): void{
