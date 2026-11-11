@@ -20,7 +20,7 @@ const controladorUsuario = {
                 }
                 console.log('Keys:', Object.keys(req.body));
                 const contrasenaHash = await bcrypt.hash(req.body.contrasena, 10);
-                const rutaImagen = req.file ? `imagenes/usuarios/${req.file.filename}`: DEFAULT_IMAGE;
+                const rutaImagen = req.file ? `imagenes/${req.file.filename}`: DEFAULT_IMAGE;
         
                 const nuevoUsuario = new modeloUsuarios ({
                     nombre: req.body.nombre, 

@@ -18,6 +18,7 @@ export class Administrador implements OnInit{
     this.loadAdminData(); 
   }
   loadAdminData(): void {
+    console.log('prueba')
     const token = localStorage.getItem('token');
     if (token) {
       try {
@@ -36,7 +37,7 @@ export class Administrador implements OnInit{
               if (response.mensaje === 'bien' && response.datos.nombre){
                 this.adminName.set(response.datos.nombre);
                 if (response.datos.imagen) {
-                  this.adminImage.set(`http://localhost:3002/${response.datos.imagen}`);
+                  this.adminImage.set(`http://localhost:3002/imagenes/${response.datos.imagen}/`);
                 }
             }
           },
