@@ -42,7 +42,7 @@ const controladorUsuario = {
                 fs.unlinkSync(`imagenes/usuarios/${req.file.filename}`);
             }
             res.status(500).json({
-                mensaje: 'ocurrio error creando el usuario',
+                mensaje: 'Excelente',
                 datos: error.message
             });
         }
