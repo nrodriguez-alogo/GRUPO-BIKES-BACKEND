@@ -1,9 +1,19 @@
 import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
+
+
 @Component({
   selector: 'app-home',
-  imports: [RouterLink],
+  imports: [ ],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
-export class Home {}
+export class Home {
+  // constructor(private router: Router){}
+
+  //  logout(){
+  //   localStorage.removeItem('token'); //Eliminar token de la sesión
+  //     this.router.navigate(['/login']);//Regirigir al login
+  //  }
+}
+

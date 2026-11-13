@@ -1,58 +1,57 @@
-<div class="top-strip">
-  DOS RUEDAS. INFINITAS POSIBILIDADES. <span>Pasión por las motos en Colombia</span>
-</div>
-<header class="site-header">
-  <nav class="container nav-shell" aria-label="Navegación principal">
-    <a class="brand" routerLink="/home" aria-label="Grupo Bikes, inicio"
-      ><span class="brand-symbol"
-        ><i class="bi bi-lightning-charge-fill" aria-hidden="true"></i></span
-      >GRUPO<span class="brand-light">BIKES</span><span class="brand-dot">.</span></a
-    >
-    <button
-      class="menu-toggle btn btn-outline-dark"
-      type="button"
-      (click)="menuAbierto = !menuAbierto"
-      [attr.aria-expanded]="menuAbierto"
-      aria-controls="main-menu"
-      aria-label="Abrir o cerrar menú"
-    >
-      <i class="bi bi-list" aria-hidden="true"></i>
-    </button>
-    <div id="main-menu" class="nav-content" [class.is-open]="menuAbierto">
-      <div class="nav-links">
-        <a
-          routerLink="/home"
-          routerLinkActive="active"
-          (click)="menuAbierto = false"
-          ariaCurrentWhenActive="page"
-          >Inicio</a
-        ><a
-          routerLink="/productos"
-          routerLinkActive="active"
-          (click)="menuAbierto = false"
-          ariaCurrentWhenActive="page"
-          >Catálogo</a
-        ><a
-          routerLink="/marcas"
-          routerLinkActive="active"
-          (click)="menuAbierto = false"
-          ariaCurrentWhenActive="page"
-          >Marcas</a
-        ><a
-          routerLink="/anuncios"
-          routerLinkActive="active"
-          (click)="menuAbierto = false"
-          ariaCurrentWhenActive="page"
-          >Comunidad</a
-        >
-      </div>
-      <div class="nav-actions">
-        <a routerLink="/login" (click)="menuAbierto = false" class="account-link"
-          ><i class="bi bi-person" aria-hidden="true"></i> Iniciar sesión</a
-        ><a routerLink="/registro" (click)="menuAbierto = false" class="btn btn-dark"
-          >Crear cuenta <i class="bi bi-arrow-up-right" aria-hidden="true"></i
-        ></a>
-      </div>
+<header class="header-container">
+  <div class="header-top">
+
+    <!-- Logo y Nombre -->
+    <a class="brand-box" routerLink="/home">
+      <img src="moto1.png" alt="Logo Grupo Bikes" class="logo-img">
+      <h1 class="brand-title">Grupo Bikes</h1>
+    </a>
+
+    <!-- Barra de búsqueda -->
+    <div class="search-box">
+      <input type="text" placeholder="¿Qué buscas?" class="search-input">
+      <span class="material-symbols-outlined search-icon">search</span>
     </div>
+
+    <!-- Acciones de usuario y carrito -->
+    <div class="actions-box">
+      <a class="cart-info" routerLink="/productos">
+        <span>Mi carrito</span>
+        <span class="material-symbols-outlined">shopping_cart</span>
+        <span class="cart-count">{{ cantidadTotal }}</span>
+      </a>
+
+      <div class="total-info">
+        Total: ${{ totalCost | number:'1.2-2' }}
+      </div>
+    
+
+      <a class="login-btn" routerLink="/login">
+        <span>Iniciar sesión</span>
+        <span class="material-symbols-outlined">account_circle</span>
+      </a>
+      <button (click)="logout()" class="btn btn-danger">Logout</button>
+    </div>
+    <div>
+      <button routerLink="/registro" class="btn btn-info">Registro</button>
+  </div>
+  </div>
+
+
+
+
+  <!-- Navegación -->
+  <nav class="nav-bar">
+    <a routerLink="/home"
+       class="nav-link">Inicio</a>
+
+    <a routerLink="/productos"
+       class="nav-link">Productos</a>
+
+    <a routerLink="/marcas"
+       class="nav-link">Marcas</a>
+
+    <a routerLink="/anuncios"
+       class="nav-link">Noticias</a>
   </nav>
 </header>
