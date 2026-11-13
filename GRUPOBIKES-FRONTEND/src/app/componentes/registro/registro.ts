@@ -65,7 +65,7 @@ export class Registro {
           alert('¡Usuario registrado con éxito!');
           this.router.navigate(['/login']);
         }else {
-          alert('No se pudo registrar: ' + response.mensaje);
+          alert(' ' + response.mensaje);
         }
       },
       error: (err) => {
