@@ -1,15 +1,26 @@
-<p>recover works!</p>
-<form [formGroup]="recoverForm" (ngSubmit)="handleRecover()">
-  <div class="mb-3">
-    <label for="exampleInputEmail1" class="form-label">Email address</label>
-    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" formControlName="correo">
+<section class="auth-page">
+  <div class="auth-card">
+    <span class="eyebrow">RECUPERA EL CAMINO</span>
+    <h1>¿Olvidaste tu contraseña?</h1>
+    <p>Escribe el correo asociado a tu cuenta para solicitar la recuperación de acceso.</p>
+    <form [formGroup]="recoverForm" (ngSubmit)="handleRecover()">
+      <div class="mb-4">
+        <label for="recover-email" class="form-label">Correo electrónico</label
+        ><input
+          type="email"
+          class="form-control"
+          id="recover-email"
+          formControlName="correo"
+          autocomplete="email"
+          placeholder="ejemplo@correo.com"
+          required
+        />
+      </div>
+      <button type="submit" class="btn btn-primary">Solicitar recuperación</button>
+    </form>
+    @if (mensaje()) {
+      <div class="alert alert-info mt-3" role="status">{{ mensaje() }}</div>
+    }
+    <p class="auth-foot"><a href="/login">Volver a iniciar sesión</a></p>
   </div>
-  <button type="submit" class="btn btn-primary">Submit</button>
-</form>
-
-<!-- Decorador -->
- @if (mensaje()){
-    <div class="alert alert-info mt-3">
-        {{ mensaje() }}
-    </div>
- }
+</section>

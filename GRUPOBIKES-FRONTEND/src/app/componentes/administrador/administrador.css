@@ -1,0 +1,41 @@
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 32px;
+  align-items: center;
+  margin-bottom: 36px;
+}
+.admin-header h1 {
+  font-size: clamp(2rem, 4vw, 3rem);
+}
+.admin-profile {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.admin-profile img {
+  width: 44px;
+  height: 44px;
+  object-fit: cover;
+  border-radius: 50%;
+  background: #e4e6df;
+}
+.admin-profile strong,
+.admin-profile span {
+  display: block;
+  font-size: 0.8rem;
+}
+.admin-profile span {
+  color: var(--muted);
+  font-size: 0.7rem;
+}
+.admin-profile .btn {
+  font-size: 0.7rem;
+}
+@media (max-width: 991px) {
+  .admin-header {
+    align-items: start;
+    flex-direction: column;
+  }
+}

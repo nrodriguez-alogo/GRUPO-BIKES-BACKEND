@@ -1,3 +1,8 @@
+<a class="skip-link" [routerLink]="[]" fragment="contenido" (click)="contenido.focus()"
+  >Saltar al contenido</a
+>
 <app-navegacion></app-navegacion>
-<router-outlet></router-outlet>
+<main #contenido id="contenido" class="site-content" tabindex="-1">
+  <router-outlet></router-outlet>
+</main>
 <app-footer></app-footer>
