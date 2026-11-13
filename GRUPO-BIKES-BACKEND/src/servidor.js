@@ -1,47 +1,61 @@
-import express from 'express';
-import morgan from 'morgan';
-import path from 'path';
-import cors from 'cors';
-
-// Importación de rutas
-import marcasRoutes from './rutas/rutaMarcas.js';
-import rutaAnuncios from './rutas/rutaAnuncios.js';
-import rutaProductos from './rutas/rutaProductos.js';
-import rutaUsuarios from './rutas/rutaUsuarios.js';
-import rutalogin from './rutas/rutaLogin.js';
-
-const servidor = express();
-servidor.use(cors({origin: 'http://localhost:4200'}));
-// Middlewares globales
-servidor.use(morgan("dev")); // Logger para desarrollo
-servidor.use(express.json()); // Middleware para parsear JSON
-servidor.use(express.urlencoded({ extended: true })); // Para manejar datos en formato urlencoded
-
-// Servidor estático para la carpeta de imágenes subidas por Multer
-servidor.use('/imagenes', express.static(path.resolve('imagenes')));
-
-// --- ENDPOINTS ---
-servidor.use('/marcas', marcasRoutes);
-servidor.use('/noticias', rutaAnuncios);
-servidor.use('/productos', rutaProductos);
-servidor.use('/usuarios', rutaUsuarios);
-servidor.use('/login', rutalogin);
-servidor.use('/login/token', rutalogin);
-
-
-// Ruta raíz
-servidor.get('/', (req, res) => {
-    res.status(200).json({ mensaje: "API ejecutándose correctamente" });
-});
-
-// Ruta por defecto para manejar endpoints no encontrados (404)
-servidor.use((req, res) => {
-    console.log(`404: ${req.method} ${req.originalUrl}`);
-    res.status(404).json({
-        mensaje: "Ruta no encontrada",
-        metodo: req.method,
-        ruta: req.originalUrl,
+import express from "express";
+import cors from "cors";
+import { IMAGE_ROOT, allowedOrigins } from "./config.js";
+import productos from "./rutas/rutaProductos.js";
+import usuarios from "./rutas/rutaUsuarios.js";
+import noticias from "./rutas/rutaAnuncios.js";
+import marcas from "./rutas/rutaMarcas.js";
+import login from "./rutas/rutaLogin.js";
+import { errors } from "./middlewares/errors.js";
+import { rateLimit } from "./middlewares/rate-limit.js";
+export function createServer() {
+  const app = express();
+  app.disable("x-powered-by");
+  app.use((req, res, next) => {
+    res.set({
+      "X-Content-Type-Options": "nosniff",
+      "X-Frame-Options": "DENY",
+      "Referrer-Policy": "no-referrer",
+      "Content-Security-Policy": "default-src 'none'; frame-ancestors 'none'",
     });
-});
-
-export default servidor;
+    next();
+  });
+  app.use(
+    cors({
+      origin: allowedOrigins(),
+      methods: ["GET", "POST", "PUT", "DELETE"],
+      allowedHeaders: ["Content-Type", "Authorization"],
+    }),
+  );
+  app.use(rateLimit({ max: 300, windowMs: 60000 }));
+  app.use(express.json({ limit: "64kb" }));
+  app.use(express.urlencoded({ extended: false, limit: "64kb" }));
+  app.use(
+    "/imagenes",
+    express.static(IMAGE_ROOT, {
+      dotfiles: "deny",
+      index: false,
+      maxAge: "1d",
+      setHeaders: (res) =>
+        res.set("Content-Security-Policy", "default-src 'none'; sandbox"),
+    }),
+  );
+  app.use((req, res, next) => {
+    res.set("Cache-Control", "no-store");
+    next();
+  });
+  app.get("/", (req, res) =>
+    res.json({ mensaje: "API de Grupo Bikes disponible." }),
+  );
+  app.use("/productos", productos);
+  app.use("/usuarios", usuarios);
+  app.use("/noticias", noticias);
+  app.use("/marcas", marcas);
+  app.use("/login", login);
+  app.use((req, res) =>
+    res.status(404).json({ mensaje: "Ruta no encontrada." }),
+  );
+  app.use(errors);
+  return app;
+}
+export default createServer();

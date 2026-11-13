@@ -39,19 +39,34 @@
           ariaCurrentWhenActive="page"
           >Marcas</a
         ><a
-          routerLink="/anuncios"
+          routerLink="/noticias"
           routerLinkActive="active"
           (click)="menuAbierto = false"
           ariaCurrentWhenActive="page"
-          >Comunidad</a
+          >Noticias</a
         >
       </div>
       <div class="nav-actions">
-        <a routerLink="/login" (click)="menuAbierto = false" class="account-link"
-          ><i class="bi bi-person" aria-hidden="true"></i> Iniciar sesión</a
-        ><a routerLink="/registro" (click)="menuAbierto = false" class="btn btn-dark"
-          >Crear cuenta <i class="bi bi-arrow-up-right" aria-hidden="true"></i
-        ></a>
+        @if (auth.usuario(); as usuario) {
+          <a
+            [routerLink]="auth.esAdmin() ? '/administrador' : '/usuarios'"
+            (click)="menuAbierto = false"
+            class="account-link"
+            ><i class="bi bi-person" aria-hidden="true"></i> {{ usuario.nombre }}</a
+          >
+          @if (auth.esAdmin()) {
+            <a routerLink="/administrador" (click)="menuAbierto = false" class="account-link"
+              >Administrar</a
+            >
+          }
+          <button class="btn btn-dark" (click)="logout()">Cerrar sesión</button>
+        } @else {
+          <a routerLink="/login" (click)="menuAbierto = false" class="account-link"
+            >Iniciar sesión</a
+          ><a routerLink="/registro" (click)="menuAbierto = false" class="btn btn-dark"
+            >Crear cuenta <i class="bi bi-arrow-up-right" aria-hidden="true"></i
+          ></a>
+        }
       </div>
     </div>
   </nav>

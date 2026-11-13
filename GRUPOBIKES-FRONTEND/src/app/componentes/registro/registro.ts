@@ -1,78 +1,73 @@
 import { Component, inject, signal } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { UserService } from '../../services/user-service';
-
-
+import { Router, RouterLink } from '@angular/router';
+import { finalize } from 'rxjs';
+import { AuthService } from '../../services/auth-service';
+import { apiError, PASSWORD_PATTERN, validImage } from '../../services/api';
 @Component({
   selector: 'app-registro',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, RouterLink],
   templateUrl: './registro.html',
   styleUrl: './registro.css',
 })
 export class Registro {
-  router = inject(Router);
   private fb = inject(FormBuilder);
-  private userService =inject(UserService);
+  private auth = inject(AuthService);
+  private router = inject(Router);
+  busy = signal(false);
+  mensaje = signal('');
   selectedFile = signal<File | null>(null);
   imagePreview = signal<string | null>(null);
   registerForm = this.fb.nonNullable.group({
-    nombre: ['', [Validators.required]],
-    correo: ['', [Validators.required, Validators.email]],
-    contrasena: ['', [Validators.required]],
-    rol: [''] //Opcional, nunca inicia vacio y no lleva validators
+    nombre: ['', [Validators.required, Validators.maxLength(100)]],
+    correo: ['', [Validators.required, Validators.email, Validators.maxLength(254)]],
+    contrasena: ['', [Validators.required, Validators.pattern(PASSWORD_PATTERN)]],
+    rol: ['usuario', Validators.required],
+    codigoAdministrador: [''],
   });
-
-  onFileSelected(event: Event): void{
-    const input =event.target as HTMLInputElement;
-    if (input.files && input.files.length > 0){
-      const file = input.files[0];
-      this.selectedFile.set(file);
-      const reader = new FileReader();
-      reader.onload = () => {
-        this.imagePreview.set(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-    }else{
-      this.selectedFile.set(null);
-      this.imagePreview.set(null);
-    }
-  }
- 
-  onSubmit(): void {
-    if (this.registerForm.invalid){
-      alert('Por favor completa los campos obligatorios (Nombre, Correo y Contraseña)');
+  onFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    this.selectedFile.set(null);
+    this.imagePreview.set(null);
+    if (!file) return;
+    if (!validImage(file)) {
+      input.value = '';
+      this.mensaje.set('Usa una imagen JPG, PNG o WebP de hasta 5 MB.');
       return;
     }
-    const datos = this.registerForm.getRawValue();
-    const formData = new FormData();
-    formData.append('nombre', datos.nombre);
-    formData.append('correo', datos.correo);
-    formData.append('contrasena', datos.contrasena);
-    if (datos.rol) {
-      formData.append('rol', datos.rol);
-    }
-    const file = this.selectedFile();
-    if (file) {
-      formData.append('imagen', file);
-    }
-    console.log('Datos con FormBuilder:', datos, 'Archivo', file);
-    this.userService.registerUser(formData)
-    .subscribe({
-      next: (response) => {
-        console.log('Respuesta del servidor:', response);
-        if (response.mensaje === 'bien'){
-          alert('¡Usuario registrado con éxito!');
-          this.router.navigate(['/login']);
-        }else {
-          alert('Ocurrio lo siguiente: ' + response.mensaje);
-        }
-      },
-      error: (err) => {
-        console.error('Error de red o del servidor: ', err);
-        alert('Ocurrió un error en el servidor al intentar registrar el usuario');
-      }
-    });
+    this.mensaje.set('');
+    this.selectedFile.set(file);
+    const reader = new FileReader();
+    reader.onload = () => this.imagePreview.set(reader.result as string);
+    reader.readAsDataURL(file);
   }
-
+  onSubmit() {
+    if (this.busy()) return;
+    const data = this.registerForm.getRawValue();
+    if (
+      this.registerForm.invalid ||
+      !data.nombre.trim() ||
+      (data.rol === 'administrador' && !data.codigoAdministrador.trim())
+    ) {
+      this.registerForm.markAllAsTouched();
+      this.mensaje.set(
+        'Completa los datos, usa una contraseña segura y, si eres administrador, ingresa tu invitación.',
+      );
+      return;
+    }
+    const form = new FormData();
+    for (const [key, value] of Object.entries(data)) form.append(key, value);
+    if (this.selectedFile()) form.append('imagen', this.selectedFile()!);
+    this.busy.set(true);
+    this.mensaje.set('');
+    this.auth
+      .register(form)
+      .pipe(finalize(() => this.busy.set(false)))
+      .subscribe({
+        next: (r) =>
+          this.router.navigateByUrl(r.usuario.rol === 'administrador' ? '/administrador' : '/home'),
+        error: (e) => this.mensaje.set(apiError(e)),
+      });
+  }
 }

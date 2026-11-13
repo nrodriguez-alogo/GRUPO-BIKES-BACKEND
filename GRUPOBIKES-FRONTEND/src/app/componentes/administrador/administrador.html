@@ -14,5 +14,32 @@
       <button class="btn btn-outline-dark btn-sm" (click)="logout()">Cerrar sesión</button>
     </div>
   </header>
-  <app-crud-productos></app-crud-productos>
+  <div class="d-flex flex-wrap gap-2 mb-4" role="group" aria-label="Administrar publicaciones">
+    <button
+      class="btn"
+      [class.btn-dark]="tab === 'productos'"
+      [class.btn-outline-dark]="tab !== 'productos'"
+      [attr.aria-pressed]="tab === 'productos'"
+      (click)="tab = 'productos'"
+    >
+      Motocicletas</button
+    ><button
+      class="btn"
+      [class.btn-dark]="tab === 'noticias'"
+      [class.btn-outline-dark]="tab !== 'noticias'"
+      [attr.aria-pressed]="tab === 'noticias'"
+      (click)="tab = 'noticias'"
+    >
+      Noticias</button
+    ><a
+      [routerLink]="tab === 'productos' ? '/productos' : '/noticias'"
+      class="btn btn-outline-dark ms-md-auto"
+      >Ver publicaciones</a
+    >
+  </div>
+  @if (tab === 'productos') {
+    <app-crud-productos></app-crud-productos>
+  } @else {
+    <app-crud-noticias></app-crud-noticias>
+  }
 </section>

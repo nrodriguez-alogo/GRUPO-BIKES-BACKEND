@@ -1,14 +1,14 @@
-import controladorAnuncios from "../driver/driverAnuncios.js";
-import { Router } from "express";//Librería para manejar las rutas de expres
-import { uploadImage } from "../middlewares/resources.js";
-
-const rutaAnuncios = Router();//Constante para manejar las rutas del anuncio
-rutaAnuncios.post('/', controladorAnuncios.crearAnuncio);
-rutaAnuncios.get('/', controladorAnuncios.leerAnuncio);
-rutaAnuncios.get('/:id', controladorAnuncios.leerAnuncioId);
-rutaAnuncios.delete('/:id', controladorAnuncios.borrarAnuncio);
-rutaAnuncios.put('/:id', uploadImage, controladorAnuncios.actualizarAnuncio);
-
-
-//Exportar por defecto la ruta de alumnos
-export default rutaAnuncios;
+import { Router } from "express";
+import controller from "../driver/driverAnuncios.js";
+import { authenticate, admin } from "../middlewares/auth.js";
+import { receiveImage } from "../middlewares/resources.js";
+import { id } from "../ayudas/validacion.js";
+import { rateLimit } from "../middlewares/rate-limit.js";
+const router = Router();
+router.get("/", controller.list);
+router.get("/:id", id, controller.get);
+router.use(authenticate, admin, rateLimit({ max: 100 }));
+router.post("/", receiveImage, controller.create);
+router.put("/:id", id, receiveImage, controller.update);
+router.delete("/:id", id, controller.remove);
+export default router;

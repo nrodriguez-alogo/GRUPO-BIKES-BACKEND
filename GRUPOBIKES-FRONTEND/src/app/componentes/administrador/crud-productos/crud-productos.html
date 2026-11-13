@@ -1,162 +1,217 @@
-<button (click)="prepararCrear()" class="btn btn-success">Nuevo producto</button>
-@if (mostrarFormulario()) {
-  <div class="mt-3 card p-3 shadow-sm">
-    <form
-      (ngSubmit)="modo() === 'crear' ? crearProducto() : actualizarProducto()"
-      enctype="multipart/form-data"
-    >
-      <div class="mb-2">
-        <!-- 1 -->
-        <label class="form-label">Modelo:</label>
-        <input
-          type="text"
-          class="form-control"
-          [(ngModel)]="productoForm.modelo"
-          name="modelo"
-          required
-        />
-      </div>
-      <div class="mb-2">
-        <!-- 2 -->
-        <label class="form-label">Descripción:</label>
-        <input
-          type="text"
-          class="form-control"
-          [(ngModel)]="productoForm.descripcion"
-          name="descripcion"
-          required
-        />
-      </div>
-      <div class="mb-3">
-        <!-- 3 -->
-        <label class="form-label">Imagen:</label>
-        <input
-          type="file"
-          class="form-control"
-          accept="image/*"
-          (change)="onFileSelected($event)"
-        />
-      </div>
-      <div class="mb-2">
-        <!-- 4 -->
-        <label class="form-label">Color:</label>
-        <input
-          type="text"
-          class="form-control"
-          [(ngModel)]="productoForm.color"
-          name="color"
-          required
-        />
-      </div>
-      <div class="mb-2">
-        <!-- 5 -->
-        <label class="form-label">Categoría:</label>
-        <select class="form-select" [(ngModel)]="productoForm.categoria" name="categoria" required>
-          <option value="" disabled>Selecciona una categoría</option>
-          <option value="Nuevas">Motos nuevas</option>
-          <option value="Usadas">Motos usadas</option>
-        </select>
-      </div>
-      <div class="mb-2">
-        <!-- 6 -->
-        <label class="form-label">Precio:</label>
-        <input
-          type="text"
-          class="form-control"
-          [(ngModel)]="productoForm.precio"
-          name="precio"
-          required
-        />
-      </div>
-      <div class="mb-2">
-        <!-- 7 -->
-        <label class="form-label">Estado:</label>
-        <input
-          type="text"
-          class="form-control"
-          [(ngModel)]="productoForm.estado"
-          name="estado"
-          required
-        />
-      </div>
-      <div class="mb-2">
-        <!-- 8 -->
-        <label class="form-label">Cilindraje:</label>
-        <input
-          type="text"
-          class="form-control"
-          [(ngModel)]="productoForm.cilindraje"
-          name="cilindraje"
-          required
-        />
-      </div>
-      <div class="mb-2">
-        <!-- 9 -->
-        <label class="form-label">Marca:</label>
-        <input
-          type="text"
-          class="form-control"
-          [(ngModel)]="productoForm.marca"
-          name="marca"
-          required
-        />
-      </div>
-      <div class="mt-2 d-flex gap-2">
-        <button type="submit" class="btn btn-primary">
-          {{ modo() === 'crear' ? 'Crear producto' : 'Actualizar producto' }}
-        </button>
-        <button type="button" class="btn btn-secondary" (click)="cancelarFormulario()">
-          Cancelar
-        </button>
-      </div>
-    </form>
+<div class="section-head">
+  <div>
+    <h2>Motocicletas</h2>
+    <p class="mb-0">Añade y actualiza las motos del catálogo.</p>
   </div>
+  <button class="btn btn-primary" (click)="create()" [disabled]="busy()">Nueva motocicleta</button>
+</div>
+@if (message()) {
+  <div class="alert alert-success" role="status">{{ message() }}</div>
 }
-@if (productos().length === 0) {
-  <p class="mt-4 text-muted">No hay productos disponibles.</p>
+@if (error()) {
+  <div class="alert alert-danger" role="alert">{{ error() }}</div>
+}
+@if (show()) {
+  <section class="card p-4 mb-4">
+    <h3>{{ editing() ? 'Editar publicación' : 'Nueva publicación' }}</h3>
+    <p class="small">
+      Todos los campos son obligatorios. Al editar puedes conservar la imagen actual.
+    </p>
+    <form [formGroup]="form" (ngSubmit)="save()">
+      <fieldset [disabled]="busy()">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label" for="productos-marca">Marca</label
+            ><input
+              id="productos-marca"
+              class="form-control"
+              type="text"
+              formControlName="marca"
+              maxlength="100"
+              required
+            />
+            @if (form.controls.marca.touched && form.controls.marca.invalid) {
+              <div class="text-danger small mt-1">Revisa este campo.</div>
+            }
+          </div>
+          <div class="col-md-6">
+            <label class="form-label" for="productos-modelo">Modelo</label
+            ><input
+              id="productos-modelo"
+              class="form-control"
+              type="text"
+              formControlName="modelo"
+              maxlength="100"
+              required
+            />
+            @if (form.controls.modelo.touched && form.controls.modelo.invalid) {
+              <div class="text-danger small mt-1">Revisa este campo.</div>
+            }
+          </div>
+          <div class="col-12">
+            <label class="form-label" for="productos-descripcion">Descripción</label
+            ><textarea
+              id="productos-descripcion"
+              class="form-control"
+              formControlName="descripcion"
+              rows="3"
+              maxlength="2000"
+              required
+            ></textarea>
+            @if (form.controls.descripcion.touched && form.controls.descripcion.invalid) {
+              <div class="text-danger small mt-1">Revisa este campo.</div>
+            }
+          </div>
+          <div class="col-md-6">
+            <label class="form-label" for="productos-color">Color</label
+            ><input
+              id="productos-color"
+              class="form-control"
+              type="text"
+              formControlName="color"
+              maxlength="100"
+              required
+            />
+            @if (form.controls.color.touched && form.controls.color.invalid) {
+              <div class="text-danger small mt-1">Revisa este campo.</div>
+            }
+          </div>
+          <div class="col-md-6">
+            <label class="form-label" for="productos-categoria">Categoría</label
+            ><select
+              id="productos-categoria"
+              class="form-select"
+              formControlName="categoria"
+              required
+            >
+              <option value="">Selecciona una categoría</option>
+              <option value="Nuevas">Motos nuevas</option>
+              <option value="Usadas">Motos usadas</option>
+            </select>
+            @if (form.controls.categoria.touched && form.controls.categoria.invalid) {
+              <div class="text-danger small mt-1">Revisa este campo.</div>
+            }
+          </div>
+          <div class="col-md-6">
+            <label class="form-label" for="productos-precio">Precio (COP)</label
+            ><input
+              id="productos-precio"
+              class="form-control"
+              type="number"
+              formControlName="precio"
+              min="0.01"
+              step="0.01"
+              max="1000000000000"
+              required
+            />
+            @if (form.controls.precio.touched && form.controls.precio.invalid) {
+              <div class="text-danger small mt-1">Revisa este campo.</div>
+            }
+          </div>
+          <div class="col-md-6">
+            <label class="form-label" for="productos-estado">Estado</label
+            ><input
+              id="productos-estado"
+              class="form-control"
+              type="text"
+              formControlName="estado"
+              maxlength="100"
+              required
+            />
+            @if (form.controls.estado.touched && form.controls.estado.invalid) {
+              <div class="text-danger small mt-1">Revisa este campo.</div>
+            }
+          </div>
+          <div class="col-md-6">
+            <label class="form-label" for="productos-cilindraje">Cilindraje (cc)</label
+            ><input
+              id="productos-cilindraje"
+              class="form-control"
+              type="number"
+              formControlName="cilindraje"
+              min="0.01"
+              step="0.01"
+              max="10000"
+              required
+            />
+            @if (form.controls.cilindraje.touched && form.controls.cilindraje.invalid) {
+              <div class="text-danger small mt-1">Revisa este campo.</div>
+            }
+          </div>
+          <div class="col-12">
+            <label class="form-label" for="productos-imagen">Imagen</label
+            ><input
+              id="productos-imagen"
+              class="form-control"
+              type="file"
+              accept="image/jpeg,image/png,image/webp"
+              (change)="select($event)"
+              [required]="!editing()"
+            />
+            <div class="form-text">JPG, PNG o WebP. Máximo 5 MB.</div>
+            @if (preview()) {
+              <img
+                class="image-preview mt-3"
+                [src]="preview()"
+                alt="Vista previa de la publicación"
+              />
+            }
+          </div>
+        </div>
+        <div class="d-flex gap-2 mt-4">
+          <button type="submit" class="btn btn-primary">
+            {{ busy() ? 'Guardando…' : 'Guardar publicación' }}</button
+          ><button type="button" class="btn btn-outline-dark" (click)="cancel()">Cancelar</button>
+        </div>
+      </fieldset>
+    </form>
+  </section>
+}
+@if (loading()) {
+  <p role="status">Cargando publicaciones…</p>
+} @else if (!items().length) {
+  <div class="empty-state">
+    <h3>Aún no hay publicaciones</h3>
+    <p>Crea la primera con el botón superior.</p>
+  </div>
 } @else {
-  <div class="table-responsive mt-4">
+  <div class="table-responsive">
     <table class="table align-middle">
       <caption>
-        Inventario de motocicletas de Grupo Bikes
+        Inventario del catálogo
       </caption>
       <thead>
         <tr>
           <th scope="col">Imagen</th>
-          <th scope="col">Marca</th>
-          <th scope="col">Modelo</th>
-          <th scope="col">Descripción</th>
-          <th scope="col">Archivo</th>
-          <th scope="col">Color</th>
-          <th scope="col">Categoría</th>
-          <th scope="col">Precio</th>
-          <th scope="col">Estado</th>
-          <th scope="col">Cilindraje</th>
+          <th scope="col">Marca y modelo</th>
+          <th scope="col">Precio (COP)</th>
           <th scope="col">Acciones</th>
         </tr>
       </thead>
       <tbody>
-        @for (prod of productos(); track prod._id) {
+        @for (item of items(); track item._id) {
           <tr>
             <td>
-              <img [src]="imagenBaseURL + prod.imagen" width="80" class="rounded" alt="Producto" />
+              <img class="item-thumbnail" [src]="imageUrl(item.imagen)" [alt]="item.modelo" />
             </td>
-            <td>{{ prod.marca }}</td>
-            <td>{{ prod.modelo }}</td>
-            <td>{{ prod.descripcion }}</td>
-            <td>{{ prod.imagen }}</td>
-            <td>{{ prod.color }}</td>
+            <td>{{ item.marca }} {{ item.modelo }}</td>
+            <td>{{ item.precio }}</td>
             <td>
-              <span class="badge bg-secondary">{{ prod.categoria }}</span>
-            </td>
-            <td>$ {{ prod.precio }}</td>
-            <td>{{ prod.estado }}</td>
-            <td>{{ prod.cilindraje }}</td>
-            <td>
-              <button class="btn btn-warning me-2" (click)="seleccionarParaEditar(prod)">
-                Editar
-              </button>
-              <button class="btn btn-danger" (click)="eliminarProducto(prod._id!)">Eliminar</button>
+              <div class="d-flex gap-2">
+                <button
+                  class="btn btn-outline-dark btn-sm"
+                  (click)="edit(item)"
+                  [disabled]="busy()"
+                >
+                  Editar</button
+                ><button
+                  class="btn btn-outline-danger btn-sm"
+                  (click)="remove(item)"
+                  [disabled]="busy()"
+                >
+                  Eliminar
+                </button>
+              </div>
             </td>
           </tr>
         }

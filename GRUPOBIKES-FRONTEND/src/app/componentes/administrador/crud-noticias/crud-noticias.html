@@ -1,0 +1,159 @@
+<div class="section-head">
+  <div>
+    <h2>Noticias</h2>
+    <p class="mb-0">Comparte artículos e imágenes con la comunidad.</p>
+  </div>
+  <button class="btn btn-primary" (click)="create()" [disabled]="busy()">Nueva noticia</button>
+</div>
+@if (message()) {
+  <div class="alert alert-success" role="status">{{ message() }}</div>
+}
+@if (error()) {
+  <div class="alert alert-danger" role="alert">{{ error() }}</div>
+}
+@if (show()) {
+  <section class="card p-4 mb-4">
+    <h3>{{ editing() ? 'Editar publicación' : 'Nueva publicación' }}</h3>
+    <p class="small">
+      Todos los campos son obligatorios. Al editar puedes conservar la imagen actual.
+    </p>
+    <form [formGroup]="form" (ngSubmit)="save()">
+      <fieldset [disabled]="busy()">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label" for="noticias-titulo">Título</label
+            ><input
+              id="noticias-titulo"
+              class="form-control"
+              type="text"
+              formControlName="titulo"
+              maxlength="160"
+              required
+            />
+            @if (form.controls.titulo.touched && form.controls.titulo.invalid) {
+              <div class="text-danger small mt-1">Revisa este campo.</div>
+            }
+          </div>
+          <div class="col-md-6">
+            <label class="form-label" for="noticias-subtitulo">Subtítulo</label
+            ><input
+              id="noticias-subtitulo"
+              class="form-control"
+              type="text"
+              formControlName="subtitulo"
+              maxlength="300"
+              required
+            />
+            @if (form.controls.subtitulo.touched && form.controls.subtitulo.invalid) {
+              <div class="text-danger small mt-1">Revisa este campo.</div>
+            }
+          </div>
+          <div class="col-12">
+            <label class="form-label" for="noticias-contenido">Artículo</label
+            ><textarea
+              id="noticias-contenido"
+              class="form-control"
+              formControlName="contenido"
+              rows="8"
+              maxlength="30000"
+              required
+            ></textarea>
+            @if (form.controls.contenido.touched && form.controls.contenido.invalid) {
+              <div class="text-danger small mt-1">Revisa este campo.</div>
+            }
+          </div>
+          <div class="col-md-6">
+            <label class="form-label" for="noticias-autor">Autor</label
+            ><input
+              id="noticias-autor"
+              class="form-control"
+              type="text"
+              formControlName="autor"
+              maxlength="100"
+              required
+            />
+            @if (form.controls.autor.touched && form.controls.autor.invalid) {
+              <div class="text-danger small mt-1">Revisa este campo.</div>
+            }
+          </div>
+          <div class="col-12">
+            <label class="form-label" for="noticias-imagen">Imagen</label
+            ><input
+              id="noticias-imagen"
+              class="form-control"
+              type="file"
+              accept="image/jpeg,image/png,image/webp"
+              (change)="select($event)"
+              [required]="!editing()"
+            />
+            <div class="form-text">JPG, PNG o WebP. Máximo 5 MB.</div>
+            @if (preview()) {
+              <img
+                class="image-preview mt-3"
+                [src]="preview()"
+                alt="Vista previa de la publicación"
+              />
+            }
+          </div>
+        </div>
+        <div class="d-flex gap-2 mt-4">
+          <button type="submit" class="btn btn-primary">
+            {{ busy() ? 'Guardando…' : 'Guardar publicación' }}</button
+          ><button type="button" class="btn btn-outline-dark" (click)="cancel()">Cancelar</button>
+        </div>
+      </fieldset>
+    </form>
+  </section>
+}
+@if (loading()) {
+  <p role="status">Cargando publicaciones…</p>
+} @else if (!items().length) {
+  <div class="empty-state">
+    <h3>Aún no hay publicaciones</h3>
+    <p>Crea la primera con el botón superior.</p>
+  </div>
+} @else {
+  <div class="table-responsive">
+    <table class="table align-middle">
+      <caption>
+        Artículos publicados
+      </caption>
+      <thead>
+        <tr>
+          <th scope="col">Imagen</th>
+          <th scope="col">Título</th>
+          <th scope="col">Autor</th>
+          <th scope="col">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (item of items(); track item._id) {
+          <tr>
+            <td>
+              <img class="item-thumbnail" [src]="imageUrl(item.imagen)" [alt]="item.titulo" />
+            </td>
+            <td>{{ item.titulo }}</td>
+            <td>{{ item.autor }}</td>
+            <td>
+              <div class="d-flex gap-2">
+                <button
+                  class="btn btn-outline-dark btn-sm"
+                  (click)="edit(item)"
+                  [disabled]="busy()"
+                >
+                  Editar</button
+                ><button
+                  class="btn btn-outline-danger btn-sm"
+                  (click)="remove(item)"
+                  [disabled]="busy()"
+                >
+                  Eliminar
+                </button>
+              </div>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+}

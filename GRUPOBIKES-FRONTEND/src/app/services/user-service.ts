@@ -1,18 +1,15 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { ServerResponse } from '../interfaces/user';
-
-@Injectable({
-  providedIn: 'root',
-})
+import { API_URL } from './api';
+import { Account, AuthService } from './auth-service';
+@Injectable({ providedIn: 'root' })
 export class UserService {
-  private httpClient = inject(HttpClient);
-  private apiUrl = 'http://localhost:3002/usuarios';
-  registerUser(formData: FormData): Observable<ServerResponse> {
-    return this.httpClient.post<ServerResponse>(this.apiUrl, formData);
+  private http = inject(HttpClient);
+  private auth = inject(AuthService);
+  registerUser(data: FormData) {
+    return this.auth.register(data);
   }
-  getUserById(id:string): Observable<ServerResponse> {
-    return this.httpClient.get<ServerResponse>(`${this.apiUrl}/${id}`);
+  getUserById(id: string) {
+    return this.http.get<{ datos: Account }>(API_URL + '/usuarios/' + id);
   }
 }

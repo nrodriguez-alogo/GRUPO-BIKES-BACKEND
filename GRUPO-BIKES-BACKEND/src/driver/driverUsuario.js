@@ -1,212 +1,105 @@
-import modeloUsuarios from '../modelos/modeloUsuarios.js';
-import { uploadImage } from '../middlewares/resources.js';
-import fs from 'fs';
-import path from 'path';
+import Users from "../modelos/modeloUsuarios.js";
 import bcrypt from "bcrypt";
-import crypto from 'node:crypto';
-import nodemailer from 'nodemailer';
-
-const DEFAULT_IMAGE = 'imagenes/usuarios/default-user.svg';
-
-const controladorUsuario = {
-    crearUsuario: async (req, res) => {
-        try {
-            uploadImage(req, res, async (error) => {
-                if (error) {
-                    return res.status(400).json({
-                        mensaje: 'ocurrio error al cargar la imagen',
-                        datos: error
-                    });
-                }
-                console.log('Keys:', Object.keys(req.body));
-                const contrasenaHash = await bcrypt.hash(req.body.contrasena, 10);
-                const rutaImagen = req.file ? `imagenes/${req.file.filename}`: DEFAULT_IMAGE;
-        
-                const nuevoUsuario = new modeloUsuarios ({
-                    nombre: req.body.nombre, 
-                    correo: req.body.correo,
-                    imagen: req.body.file || rutaImagen,
-                    contrasena: contrasenaHash,
-                    rol: req.body.rol || 'usuario'
-                });
-
-                const guardarUsuario = await nuevoUsuario.save();
-
-                res.status(201).json({
-                    mensaje: 'usuario creado exitosamente',
-                    datos: guardarUsuario
-                });
-            });
-        } catch (error) {
-            if (req.file && fs.existsSync(`imagenes/usuarios/${req.file.filename}`)) {
-                fs.unlinkSync(`imagenes/usuarios/${req.file.filename}`);
-            }
-            res.status(500).json({
-                mensaje: 'Excelente',
-                datos: error.message
-            });
-        }
-    },
-    leerUsuario: async (req, res) => {
-        try {
-            const usuario = await modeloUsuarios.find();
-            res.status(200).json({
-                mensaje: 'usuario encontrado exitosamente',
-                datos: usuario
-            });
-        } catch (error) {
-            res.status(500).json ({
-                mensaje: 'error buscando el usuario (posiblemente no existe o esta mal escrita)',
-                datos: error.message
-            });
-        }
-    },
-
-    leerUsuarioId: async (req, res) => {
-        try{
-            const usuario = await modeloUsuarios.findById(req.params.id);
-            if (!usuario) {
-                return res.status(404).json({ mensaje: 'usuario definitivamente no encontrado xd'});  
-            }
-            res.status(200).json({
-                mensaje: 'usuario encontrado :v',
-                datos: usuario
-            });
-        } catch (error) {
-            res.status(500).json ({
-                mensaje: 'error buscando el ID (posiblemente no existe o esta mal escrita)',
-                datos: error.message
-            });
-        }
-    },
-
-    actualizarUsuario: async (req, res) => {
-        try {
-            uploadImage(req, res, async (error) => {
-                if (error) {
-                    return res.status(400).json({ mensaje: 'error actaulizando el usuario, verifique', datos: error});
-                }
-
-                const usuarioExistente = await modeloUsuarios.findById(req.params.id);
-                if (!usuarioExistente) {
-                    if (req.file) fs.unlinkSync(req.file.path);
-                    return res.status(404).json({mensaje: 'usuario no encontrado'});
-                }
-                
-                let nuevaimagen1 = usuarioExistente.imagen;
-                if (req.file) {
-                    if (usuarioExistente.imagen) {
-                        const rutaImagenAntigua1 = path.join('imagenes', usuarioExistente.imagen);
-                        if (fs.existsSync(rutaImagenAntigua1)) {
-                            fs.unlinkSync(rutaImagenAntigua1);
-                        }
-                    }
-                    nuevaimagen1 = req.file.filename;
-                }
-
-                const nuevoModeloUsuario = {
-                    nombre: req.body.nombre || usuarioExistente.nombre,
-                    correo: req.body.correo || usuarioExistente.correo,
-                    imagen: nuevaimagen1,
-                    contrasena: req.body.contrasena || usuarioExistente.contrasena,
-                    rol: req.body.rol || usuarioExistente.rol,
-                };
-
-                const usuarioActualizado = await modeloUsuarios.findByIdAndUpdate(
-                    req.params.id,
-                    nuevoModeloUsuario,
-                 { new: true, runValidations: true }
-                );
-
-                res.status(200).json({
-                    mensaje: 'usuario actializado',
-                    datos: usuarioActualizado
-                });
-            });
-        } catch (error) {
-            res.status(500).json({
-                mensaje: 'Error encontrado, solucionelo rapidamente',
-                datos: error.message
-            });
-        }
-    },
-    
-    borrarUsuario: async (req, res) => {
-        try{
-            const usuarioBorrar = await modeloUsuarios.findByIdAndDelete(req.params.id);
-            if (!usuarioBorrar) {
-                return res.status(404).json({mensaje: 'usuario no encontrado'});
-            }
-            if (usuarioBorrar.imagen && usuarioBorrar.imagen !== DEFAULT_IMAGE) {
-                const rutaImagen = path.join('imagenes', usuarioBorrar.imagen);
-                if (fs.existsSync(rutaImagen)) {
-                    fs.unlinkSync(rutaImagen);
-                }
-            }
-            
-            res.status(200).json({
-                mensaje: 'elminado usuario correctametne',
-                datos: null
-            });
-        } catch (error) {
-            res.status(500).json({
-                mensaje: 'error eliminando cliente'
-            });
-        }
+import { timingSafeEqual, createHash } from "node:crypto";
+import { storeImage, removeImage } from "../middlewares/resources.js";
+import { email, password, text, fail } from "../ayudas/validacion.js";
+import { session, publicUser } from "../ayudas/funciones.js";
+function allowedAdmin(code) {
+  const expected = process.env.ADMIN_REGISTRATION_CODE;
+  return (
+    expected &&
+    typeof code === "string" &&
+    timingSafeEqual(
+      createHash("sha256").update(code).digest(),
+      createHash("sha256").update(expected).digest(),
+    )
+  );
+}
+export default {
+  async crearUsuario(req, res) {
+    const body = req.body || {};
+    const nombre = text(body.nombre, "Nombre", 100);
+    const correo = email(body.correo);
+    const plain = password(body.contrasena);
+    const rol = body.rol || "usuario";
+    if (!["usuario", "administrador"].includes(rol)) fail(400, "Rol inválido.");
+    if (rol === "administrador" && !allowedAdmin(body.codigoAdministrador))
+      fail(403, "El código de invitación de administrador es inválido.");
+    if (await Users.exists({ correo }).collation({ locale: "en", strength: 2 }))
+      fail(409, "Ya existe una cuenta con ese correo.");
+    const hash = await bcrypt.hash(plain, 12);
+    const imagen = req.file
+      ? await storeImage(req, "usuarios")
+      : "usuarios/default-user.svg";
+    const user = await Users.create({
+      nombre,
+      correo,
+      emailKey: correo,
+      contrasena: hash,
+      rol,
+      imagen,
+    });
+    res.status(201).json(session(user));
+  },
+  async leerUsuario(req, res) {
+    res.json({ datos: await Users.find().sort({ _id: -1 }).limit(100) });
+  },
+  async leerUsuarioId(req, res) {
+    const user = await Users.findById(req.params.id);
+    if (!user) fail(404, "Cuenta no encontrada.");
+    res.json({ datos: publicUser(user) });
+  },
+  async actualizarUsuario(req, res) {
+    const body = req.body || {};
+    if (body.rol !== undefined)
+      fail(400, "No se permite cambiar el rol desde este formulario.");
+    const user = await Users.findById(req.params.id);
+    if (!user) fail(404, "Cuenta no encontrada.");
+    const data = {};
+    if (body.nombre !== undefined)
+      data.nombre = text(body.nombre, "Nombre", 100);
+    if (body.correo !== undefined) {
+      data.correo = email(body.correo);
+      if (
+        await Users.exists({
+          _id: { $ne: user._id },
+          correo: data.correo,
+        }).collation({ locale: "en", strength: 2 })
+      )
+        fail(409, "Ya existe una cuenta con ese correo.");
+      data.emailKey = data.correo;
     }
+    if (body.contrasena !== undefined) {
+      if (String(req.user._id) !== req.params.id)
+        fail(
+          403,
+          "Usa la recuperación para cambiar la contraseña de otra cuenta.",
+        );
+      const current = await Users.findById(req.params.id).select("+contrasena");
+      if (
+        typeof body.contrasenaActual !== "string" ||
+        !(await bcrypt.compare(body.contrasenaActual, current.contrasena))
+      )
+        fail(401, "La contraseña actual no es correcta.");
+      data.contrasena = await bcrypt.hash(password(body.contrasena), 12);
+      data.tokenVersion = (req.user.tokenVersion || 0) + 1;
+      data.recoveryHash = null;
+      data.recoveryExpires = null;
+    }
+    if (req.file) data.imagen = await storeImage(req, "usuarios");
+    if (!Object.keys(data).length) fail(400, "No se recibieron cambios.");
+    const updated = await Users.findByIdAndUpdate(
+      req.params.id,
+      { $set: data },
+      { returnDocument: "after", runValidators: true },
+    );
+    if (data.imagen) await removeImage(user.imagen);
+    res.json({ datos: publicUser(updated), mensaje: "Cuenta actualizada." });
+  },
+  async borrarUsuario(req, res) {
+    const user = await Users.findByIdAndDelete(req.params.id);
+    if (!user) fail(404, "Cuenta no encontrada.");
+    await removeImage(user.imagen);
+    res.json({ mensaje: "Cuenta eliminada." });
+  },
 };
-
-function generarContrasenaAleatoria(){
-    return crypto.randomBytes(6).toString('hex'); //La función "ramdomBytes" genera un dato aleatorio. Cuántos datos?
-}
-
-export const olvidarContrasena = async (req, res)=> {
-    try {
-        //Enviar solicitud para verificar si el correo ya existe en la base de datos
-        const {correo} = req.body;
-        const user = await modeloUsuarios.findOne({correo});
-        if(!user){
-            return res.json({
-            resultado:'mistake',
-            mensaje: 'El correo ingresado no se encuentra en la base de datos',
-            data: null
-            });
-        }
-        //Generar clave temporal y encriptada
-        const newContra = generarContrasenaAleatoria();
-        const hashContrasena = await bcrypt.hash(newContra, 10);
-        user.contrasena = hashContrasena;
-        await user.save();//Se guarda la clave encriptada directamente en la bese de datos
-        //Realizar la configuración del servicio del correo
-        const transporter = nodemailer.createTransport({
-            service: 'gmail',
-            auth:{
-                user: process.env.EMAIL_NODE,
-                pass: process.env.PASS_NODE,
-            }
-                        
-        });
-        //Configurar contendio del correo
-        const mailOptions = {
-            from: process.env.EMAIL_NODE,
-            to: correo,  //email que puso el usuario
-            subject: 'Recuperación de contraseña',
-            text: `Hola ${user.nombre}, \n\n Tu nueva contraseña temporal es: ${newContra}\n\nRecuerda actualizar tú contraseña en tú perfil por seguridad.\n\nSaludos desde el área de soporte` //Lo que el usuari ve
-        }
-
-        await transporter.sendMail(mailOptions);
-        res.json({
-            resultado:'fine',
-            mensaje: 'Se ha enviado una nueva contraseña al correo registrado',
-            });
-         
-    } catch (error) {
-        console.log('Error al generar contraseña')
-        res.json({
-            resultado:'mistake',
-            mensaje: 'Error interno en el servidor', error: error.mensaje,
-            });
-    }
-}
-
-export default controladorUsuario;

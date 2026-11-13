@@ -3,6 +3,9 @@
     <span class="eyebrow">BIENVENIDO DE NUEVO</span>
     <h1>Sigamos rodando.</h1>
     <p class="mb-4">Ingresa a tu cuenta de Grupo Bikes.</p>
+    @if (mensaje()) {
+      <div class="alert alert-danger" role="alert">{{ mensaje() }}</div>
+    }
     <form [formGroup]="CredentialsForm" (ngSubmit)="handleSubmit()">
       <div class="mb-3">
         <label class="form-label" for="email">Correo electrónico</label
@@ -31,8 +34,9 @@
       <div class="text-end mb-4">
         <a routerLink="/recover" class="small">¿Olvidaste tu contraseña?</a>
       </div>
-      <button type="submit" class="btn btn-primary">
-        Iniciar sesión <i class="bi bi-arrow-right" aria-hidden="true"></i>
+      <button type="submit" class="btn btn-primary" [disabled]="busy()">
+        {{ busy() ? 'Ingresando…' : 'Iniciar sesión' }}
+        <i class="bi bi-arrow-right" aria-hidden="true"></i>
       </button>
     </form>
     <p class="auth-foot">¿Primera vez aquí? <a routerLink="/registro">Crea tu cuenta</a></p>

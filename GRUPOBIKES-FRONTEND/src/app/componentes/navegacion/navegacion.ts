@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
-
+import { AuthService } from '../../services/auth-service';
 @Component({
   selector: 'app-navegacion',
   imports: [RouterLink, RouterLinkActive],
@@ -8,15 +8,16 @@ import { Router, RouterLink, RouterLinkActive } from '@angular/router';
   styleUrl: './navegacion.css',
 })
 export class Navegacion {
+  auth = inject(AuthService);
+  private router = inject(Router);
   menuAbierto = false;
-  // Propiedades requeridas por la plantilla (puedes conectar tu servicio de carrito aquí)
-  cantidadTotal: number = 0;
-  totalCost: number = 0;
-
-  constructor(private router: Router) {}
-
   logout() {
-    localStorage.removeItem('token'); //Eliminar token de la sesión
-    this.router.navigate(['/login']); //Regirigir al login
+    this.menuAbierto = false;
+    this.auth
+      .logout()
+      .subscribe({
+        next: () => this.router.navigateByUrl('/login'),
+        error: () => this.router.navigateByUrl('/login'),
+      });
   }
 }

@@ -1,12 +1,14 @@
 import { Router } from "express";
-import controladorProducto from "../driver/driverProductos.js";
-
-const rutaProductos = Router();
-
-rutaProductos.post('/', controladorProducto.crearProducto);
-rutaProductos.get('/', controladorProducto.leerProductos);
-rutaProductos.get('/:id', controladorProducto.leerProductoId);
-rutaProductos.put('/:id', controladorProducto.actualizarProducto);
-rutaProductos.delete('/:id', controladorProducto.borrarProducto);
-
-export default rutaProductos;
+import controller from "../driver/driverProductos.js";
+import { authenticate, admin } from "../middlewares/auth.js";
+import { receiveImage } from "../middlewares/resources.js";
+import { id } from "../ayudas/validacion.js";
+import { rateLimit } from "../middlewares/rate-limit.js";
+const router = Router();
+router.get("/", controller.list);
+router.get("/:id", id, controller.get);
+router.use(authenticate, admin, rateLimit({ max: 100 }));
+router.post("/", receiveImage, controller.create);
+router.put("/:id", id, receiveImage, controller.update);
+router.delete("/:id", id, controller.remove);
+export default router;

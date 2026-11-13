@@ -1,59 +1,27 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
-import { Router } from '@angular/router';
-import { jwtDecode } from 'jwt-decode';
-import { UserService } from '../../services/user-service';
+import { Component, inject } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
+import { AuthService } from '../../services/auth-service';
+import { imageUrl } from '../../services/api';
 import { CrudProductos } from './crud-productos/crud-productos';
-
+import { CrudNoticias } from './crud-noticias/crud-noticias';
 @Component({
   selector: 'app-administrador',
-  imports: [CrudProductos],
+  imports: [CrudProductos, CrudNoticias, RouterLink],
   templateUrl: './administrador.html',
   styleUrl: './administrador.css',
 })
-export class Administrador implements OnInit{
+export class Administrador {
+  auth = inject(AuthService);
   private router = inject(Router);
-  adminName = signal<string>('Administrador');
-  adminImage = signal<string>('http://localhost:3002/imagenes/usuarios/default-user.svg');
-  ngOnInit(): void {
-    this.loadAdminData(); 
+  tab: 'productos' | 'noticias' = 'productos';
+  adminName = () => this.auth.usuario()?.nombre || 'Administrador';
+  adminImage = () => imageUrl(this.auth.usuario()?.imagen);
+  logout() {
+    this.auth
+      .logout()
+      .subscribe({
+        next: () => this.router.navigateByUrl('/login'),
+        error: () => this.router.navigateByUrl('/login'),
+      });
   }
-  loadAdminData(): void {
-    console.log('prueba')
-    const token = localStorage.getItem('token');
-    if (token) {
-      try {
-        const decoded: any = jwtDecode(token);
-        console.log("Token decodificado en admin: ", decoded);
-        if (decoded.nombre) {
-          this.adminName.set(decoded.nombre);
-        }
-        if(decoded.imagen) {
-          const imageUrl =`http://localhost:3002/${decoded.imagen}`;
-          this,this.adminImage.set(imageUrl);
-        }
-        if (decoded.id) {
-          this.userService.getUserById(decoded.id).subscribe({
-            next: (response) => {
-              if (response.mensaje === 'bien' && response.datos.nombre){
-                this.adminName.set(response.datos.nombre);
-                if (response.datos.imagen) {
-                  this.adminImage.set(`http://localhost:3002/imagenes/${response.datos.imagen}/`);
-                }
-            }
-          },
-        error: (err) => console.error('Error al obtener datos el admin: ', err)
-        });
-        }
-      }catch (error) {
-        console.error("Error al decodificar el token: ", error);
-      }
-    }
-  }
-
-  private userService = inject(UserService);
-
-  logout(){
-       localStorage.removeItem('token'); //Eliminar token de la sesión
-       this.router.navigate(['/login']);//Regirigir al login
-   }
 }

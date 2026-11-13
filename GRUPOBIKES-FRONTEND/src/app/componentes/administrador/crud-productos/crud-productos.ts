@@ -1,151 +1,126 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { Component, inject, signal, OnInit } from '@angular/core';
+import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
+import { finalize } from 'rxjs';
 import { ProductosService } from '../../../services/productos-service';
-import {Productos} from '../../../interfaces/productos'
-
-
+import { Productos } from '../../../interfaces/productos';
+import { apiError, validImage, imageUrl } from '../../../services/api';
 @Component({
   selector: 'app-crud-productos',
-  imports: [FormsModule],
+  imports: [ReactiveFormsModule],
   templateUrl: './crud-productos.html',
   styleUrl: './crud-productos.css',
 })
-export class CrudProductos {
-  private productosService = inject(ProductosService);
-  productos = signal<Productos[]>([]);
-  mostrarFormulario = signal<boolean>(false);
-  modo = signal <'crear' | 'editar'>('crear');
-  selectedFile = signal<File | null>(null);
-  imagenBaseURL = 'http://localhost:3002/imagenes/';
-  productoForm: Productos = this.resetProducto();
-  
-
-  ngOnInit():void{
-    this.obtenerProductos();
+export class CrudProductos implements OnInit {
+  private service = inject(ProductosService);
+  private fb = inject(FormBuilder);
+  items = signal<Productos[]>([]);
+  show = signal(false);
+  busy = signal(false);
+  loading = signal(false);
+  message = signal('');
+  error = signal('');
+  file = signal<File | null>(null);
+  preview = signal('');
+  editing = signal<string | null>(null);
+  imageUrl = imageUrl;
+  form = this.fb.nonNullable.group({
+    marca: ['', [Validators.required, Validators.maxLength(100)]],
+    modelo: ['', [Validators.required, Validators.maxLength(100)]],
+    descripcion: ['', [Validators.required, Validators.maxLength(2000)]],
+    color: ['', [Validators.required, Validators.maxLength(100)]],
+    categoria: ['', [Validators.required, Validators.maxLength(100)]],
+    precio: [0, [Validators.required, Validators.min(0.01), Validators.max(1e12)]],
+    estado: ['', [Validators.required, Validators.maxLength(100)]],
+    cilindraje: [0, [Validators.required, Validators.min(0.01), Validators.max(10000)]],
+  });
+  ngOnInit() {
+    this.load();
   }
-
-  obtenerProductos():void{
-    this.productosService.getAll().subscribe({
-      next:(resp)=>{
-        this.productos.set(resp);
-      },
-      error: (err)=> console.error("Error al cargar productos", err)
-    });
+  load() {
+    this.loading.set(true);
+    this.service
+      .getAll()
+      .pipe(finalize(() => this.loading.set(false)))
+      .subscribe({ next: (r) => this.items.set(r), error: (e) => this.error.set(apiError(e)) });
   }
-  onFileSelected(event: Event):void{
+  create() {
+    this.cancel();
+    this.message.set('');
+    this.show.set(true);
+  }
+  edit(item: Productos) {
+    this.cancel();
+    this.editing.set(item._id!);
+    this.form.reset(item);
+    this.preview.set(imageUrl(item.imagen));
+    this.show.set(true);
+  }
+  cancel() {
+    this.show.set(false);
+    this.editing.set(null);
+    this.file.set(null);
+    this.preview.set('');
+    this.form.reset();
+    this.error.set('');
+  }
+  select(event: Event) {
     const input = event.target as HTMLInputElement;
-    if(input.files && input.files.length>0){
-      this.selectedFile.set(input.files[0]);
-    }
-  }
-   
-  //Función para enviar un nuevo producto al backend. Hacer que se guarde en la base de datos del back, lo que se haga en el front
-  crearProducto():void{
-    const file = this.selectedFile();
-    if(!file){
-      alert('Por favor selecciona una imagen');
+    const file = input.files?.[0];
+    this.file.set(null);
+    if (!file) return;
+    if (!validImage(file)) {
+      input.value = '';
+      this.error.set('Selecciona una imagen JPG, PNG o WebP de hasta 5 MB.');
       return;
     }
-    //Constante para enviar los archivos físicos junto con el texto por el HTTP
-    const formData= new FormData();
-    formData.append('marca', this.productoForm.marca);
-    formData.append('modelo', this.productoForm.modelo);
-    formData.append('descripcion', this.productoForm.descripcion);
-    formData.append('imagen', file);
-    formData.append('color', this.productoForm.color);
-    formData.append('categoria', this.productoForm.categoria);
-    formData.append('precio', this.productoForm.precio.toString());
-    formData.append('estado', this.productoForm.estado);
-    formData.append('cilindraje', this.productoForm.cilindraje.toString());
-    this.productosService.crear(formData).subscribe({
-    next: () =>{
-      alert('Producto creado correctamente');
-      this.cancelarFormulario();
-      this.obtenerProductos();
-      },
-      error:(err)=>{
-        console.log("Error al crear el producto", err);
-        alert('Error al crear el producto');
-      }
-    });
+    this.file.set(file);
+    this.error.set('');
+    const reader = new FileReader();
+    reader.onload = () => this.preview.set(reader.result as string);
+    reader.readAsDataURL(file);
   }
-
-  actualizarProducto():void{
-    if(!this.productoForm._id){
-      alert('No se encontró el ID del producto');
+  save() {
+    if (this.busy()) return;
+    const data = this.form.getRawValue();
+    if (
+      this.form.invalid ||
+      Object.values(data).some((v) => typeof v === 'string' && !v.trim()) ||
+      (!this.editing() && !this.file())
+    ) {
+      this.form.markAllAsTouched();
+      this.error.set('Completa todos los campos con valores válidos y selecciona una imagen.');
       return;
     }
-    const formData = new FormData();
-    formData.append('modelo', this.productoForm.modelo);
-    formData.append('descripcion', this.productoForm.descripcion);
-    formData.append('color', this.productoForm.color);
-    formData.append('categoria', this.productoForm.categoria);
-    formData.append('precio', this.productoForm.precio.toString());
-    formData.append('estado', this.productoForm.estado);
-    formData.append('cilindraje', this.productoForm.cilindraje.toString());
-    formData.append('marca', this.productoForm.marca);
-
-    const file = this.selectedFile();
-    if(file){
-      formData.append('imagen', file);
-    }
-    this.productosService.actualizar(this.productoForm._id, formData).subscribe({
-      next: () =>{
-        alert('Producto se actualizado correctamente');
-        this.cancelarFormulario();
-        this.obtenerProductos();
+    const body = new FormData();
+    for (const [key, value] of Object.entries(data)) body.append(key, String(value));
+    if (this.file()) body.append('imagen', this.file()!);
+    this.busy.set(true);
+    this.error.set('');
+    const request = this.editing()
+      ? this.service.actualizar(this.editing()!, body)
+      : this.service.crear(body);
+    request.pipe(finalize(() => this.busy.set(false))).subscribe({
+      next: () => {
+        this.cancel();
+        this.message.set('Publicación guardada. Ya puedes verla en el catálogo.');
+        this.load();
       },
-      error:(err)=>{
-        console.log('Error al actualizar el producto', err);
-        alert("Error al actualizar el producto");
-      }
+      error: (e) => this.error.set(apiError(e)),
     });
   }
-
-  eliminarProducto(id: string):void{
-    if(confirm('¿Estás seguro de eliminar este producto?')){
-      this.productosService.delete(id).subscribe({
-        next: ()=>{
-          this.obtenerProductos();
+  remove(item: Productos) {
+    if (this.busy() || !confirm('¿Eliminar esta publicación?')) return;
+    this.busy.set(true);
+    this.error.set('');
+    this.service
+      .delete(item._id!)
+      .pipe(finalize(() => this.busy.set(false)))
+      .subscribe({
+        next: () => {
+          this.message.set('Publicación eliminada.');
+          this.load();
         },
-        error: (err)=> console.log('Error al eliminar', err)
-      })
-    }
-
+        error: (e) => this.error.set(apiError(e)),
+      });
   }
-
-  resetProducto(): Productos{
-    return{
-      marca: '',
-      modelo: '',
-      descripcion: '',
-      imagen: '',
-      color: '',
-      categoria: '',
-      precio: 0,
-      estado: '',
-      cilindraje: 0
-    };
-  }
-  prepararCrear(): void{
-    this.modo.set('crear');//La lógica ejecuta el restro del producto
-    this.productoForm = this.resetProducto();//Limpiar datos
-    this.selectedFile.set(null) //Reiniciar signal del archivo
-    this.mostrarFormulario.set(true)//Hacer que el formulario sea visible en la pantalla del HTML
-  }
-  //Función para cargar en el formulario de edición
-  seleccionarParaEditar(producto: Productos):void{
-    this.modo.set('editar');
-    this.productoForm = {...producto};//operador sprit"..."
-    this.selectedFile.set(null);//Por si el usuario no quiere cambiar la imagen y desea conservar la actual
-    this.mostrarFormulario.set(true);
-  }
-  //Método para cerrar y cancelar el formulario
-  cancelarFormulario():void{
-    this.mostrarFormulario.set(false);// Para que se oculte el formulario
-    this.productoForm = this.resetProducto();
-    this.selectedFile.set(null);//Reiniciar el objeto del formulario
-  }
-  
-
 }

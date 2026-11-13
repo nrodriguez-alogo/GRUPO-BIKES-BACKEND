@@ -1,0 +1,37 @@
+:host {
+  display: block;
+}
+.section-head h2 {
+  font-size: 2rem;
+}
+fieldset {
+  min-width: 0;
+}
+.image-preview {
+  width: 240px;
+  height: 160px;
+  object-fit: contain;
+  background: var(--paper);
+  border-radius: 6px;
+}
+.item-thumbnail {
+  width: 90px;
+  height: 65px;
+  object-fit: contain;
+  background: var(--paper);
+  border-radius: 4px;
+}
+.table {
+  min-width: 600px;
+}
+.table-responsive {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+.btn-sm {
+  font-size: 0.75rem;
+  padding: 0.5rem 0.8rem;
+}
+textarea {
+  resize: vertical;
+}

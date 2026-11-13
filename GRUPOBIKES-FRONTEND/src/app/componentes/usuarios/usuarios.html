@@ -1,0 +1,25 @@
+<section class="container section-pad">
+  <span class="eyebrow">TU ESPACIO EN GRUPO BIKES</span>
+  <h1>Mi cuenta</h1>
+  @if (auth.usuario(); as user) {
+    <div class="card p-4 mt-4">
+      <div class="d-flex align-items-center gap-3">
+        <img
+          [src]="imageUrl(user.imagen)"
+          alt="Tu foto de perfil"
+          width="80"
+          height="80"
+          class="rounded-circle object-fit-cover"
+        />
+        <div>
+          <h2 class="h3">{{ user.nombre }}</h2>
+          <p class="mb-0">{{ user.correo }}</p>
+          <span class="badge text-bg-dark">{{ user.rol }}</span>
+        </div>
+      </div>
+      <div class="mt-4">
+        <a routerLink="/productos" class="btn btn-primary">Explorar catálogo</a>
+      </div>
+    </div>
+  }
+</section>

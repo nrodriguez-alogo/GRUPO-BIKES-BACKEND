@@ -1,33 +1,26 @@
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
-import { map, Observable } from 'rxjs';
-import { Productos, ApiProductos } from '../interfaces/productos';
-
-
-@Injectable({
-  providedIn: 'root',
-})
+import { map } from 'rxjs';
+import { Productos } from '../interfaces/productos';
+import { API_URL } from './api';
+@Injectable({ providedIn: 'root' })
 export class ProductosService {
   private http = inject(HttpClient);
-  private API_URL = 'http://localhost:3002/productos';
-
-  getAll(): Observable<Productos[]>{
-    return this.http.get<ApiProductos>(this.API_URL).pipe(map(resp=>resp.datos)
-  );
+  getAll() {
+    return this.http.get<{ datos: Productos[] }>(API_URL + '/productos').pipe(map((r) => r.datos));
   }
-  getByCategoria(categoria: string): Observable<Productos[]>{
-    return this.http.get<ApiProductos>(`${this.API_URL}?categoria=
-      ${categoria}`).pipe(map(resp => resp.datos)
-    );
+  getByCategoria(categoria: string) {
+    return this.http
+      .get<{ datos: Productos[] }>(API_URL + '/productos', { params: { categoria } })
+      .pipe(map((r) => r.datos));
   }
-  crear(formData: FormData): Observable<any> {
-    return this.http.post(this.API_URL, formData);
+  crear(data: FormData) {
+    return this.http.post(API_URL + '/productos', data);
   }
-  actualizar(id: string, datos: FormData): Observable<any> {
-    return this.http.put(`${this.API_URL}/${id}`, datos);
+  actualizar(id: string, data: FormData) {
+    return this.http.put(API_URL + '/productos/' + id, data);
   }
-  delete(id: string,): Observable<any> {
-    return this.http.delete(`${this.API_URL}/${id}`);
+  delete(id: string) {
+    return this.http.delete(API_URL + '/productos/' + id);
+  }
 }
-}
-

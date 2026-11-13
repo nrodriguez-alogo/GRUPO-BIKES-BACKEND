@@ -1,34 +1,62 @@
 <section class="container section-pad">
-  <header class="section-head">
-    <div>
-      <span class="eyebrow">EL PUNTO DE ENCUENTRO</span>
-      <h1>Vivimos las motos.</h1>
-      <p>Un espacio para la comunidad de Grupo Bikes.</p>
-    </div>
+  <header class="page-heading pt-0">
+    <span class="eyebrow">HISTORIAS SOBRE DOS RUEDAS</span>
+    <h1>Noticias</h1>
+    <p>Novedades y artículos de la comunidad de Grupo Bikes.</p>
   </header>
-  <div class="row g-4">
-    <div class="col-lg-7">
-      <img
-        class="community-photo"
-        src="pexels-marius-gabriel-241207761-33203536.jpg"
-        alt="Inspiración para recorrer nuevos caminos en moto"
-      />
+  @if (loading()) {
+    <p role="status">Cargando noticias…</p>
+  } @else if (error()) {
+    <div class="empty-state" role="alert">
+      <h2>No pudimos cargar las noticias</h2>
+      <p>{{ error() }}</p>
+      <button class="btn btn-outline-dark" (click)="load()">Volver a intentar</button>
     </div>
-    <div class="col-lg-5 d-flex align-items-center">
-      <div class="community-copy">
-        <span class="eyebrow">PRÓXIMAMENTE</span>
-        <h2>Más caminos.<br />Más historias.</h2>
-        <p>
-          Estamos preparando este espacio para compartir novedades, encuentros y experiencias sobre
-          dos ruedas.
-        </p>
-        <p>
-          Mientras tanto, descubre las marcas y encuentra inspiración para tu próximo recorrido.
-        </p>
-        <a href="/marcas" class="btn btn-primary"
-          >Explorar marcas <i class="bi bi-arrow-up-right" aria-hidden="true"></i
-        ></a>
-      </div>
+  } @else {
+    <div class="row g-4">
+      @for (item of items(); track item._id) {
+        <div class="col-lg-6">
+          <article class="card h-100 news-card">
+            <img
+              class="news-photo"
+              [src]="imageUrl(item.imagen)"
+              [alt]="item.titulo"
+              loading="lazy"
+            />
+            <div class="card-body">
+              <p class="small">
+                {{ item.autor }}
+                @if (item.createdAt) {
+                  · {{ item.createdAt | date: 'dd/MM/yyyy' }}
+                }
+              </p>
+              <h2>{{ item.titulo }}</h2>
+              <p>{{ item.subtitulo }}</p>
+              <button
+                class="btn btn-outline-dark"
+                (click)="toggle(item._id)"
+                [attr.aria-expanded]="expanded() === item._id"
+                [attr.aria-controls]="'article-' + item._id"
+              >
+                {{ expanded() === item._id ? 'Cerrar artículo' : 'Leer artículo' }}
+              </button>
+              <div
+                [id]="'article-' + item._id"
+                [hidden]="expanded() !== item._id"
+                class="article-content"
+              >
+                {{ item.contenido }}
+              </div>
+            </div>
+          </article>
+        </div>
+      } @empty {
+        <div class="col-12 empty-state">
+          <i class="bi bi-newspaper" aria-hidden="true"></i>
+          <h2>Pronto, nuevas historias</h2>
+          <p>Las noticias aparecerán aquí cuando sean publicadas.</p>
+        </div>
+      }
     </div>
-  </div>
+  }
 </section>

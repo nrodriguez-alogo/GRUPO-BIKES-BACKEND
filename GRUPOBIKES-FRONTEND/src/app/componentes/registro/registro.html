@@ -2,56 +2,46 @@
   <div class="container">
     <div class="row justify-content-center">
       <div class="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-5">
-
         <div class="card register-card border-0 shadow-lg">
           <div class="card-body p-4 p-md-5">
-
             <!-- Encabezado -->
             <div class="text-center mb-4">
               <span class="register-badge">NUEVA CUENTA</span>
               <h2 class="register-title mt-3 mb-2">Crear cuenta</h2>
-              <p class="text-secondary mb-0">
-                Completa tus datos para comenzar.
-              </p>
+              <p class="text-secondary mb-0">Completa tus datos para comenzar.</p>
             </div>
 
             <!-- Foto de perfil -->
             <div class="profile-section text-center mb-4">
               <div class="profile-preview-container mx-auto">
-
                 @if (imagePreview()) {
                   <img
                     [src]="imagePreview()"
                     alt="Vista previa de tu foto de perfil"
-                    class="profile-preview">
+                    class="profile-preview"
+                  />
                 } @else {
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 200 200"
                     class="profile-placeholder"
                     role="img"
-                    aria-label="Avatar predeterminado">
-
+                    aria-label="Avatar predeterminado"
+                  >
                     <circle
                       cx="100"
                       cy="100"
                       r="95"
                       fill="#e9edf3"
                       stroke="#d5dbe5"
-                      stroke-width="4"/>
+                      stroke-width="4"
+                    />
 
-                    <circle
-                      cx="100"
-                      cy="75"
-                      r="35"
-                      fill="#929dad"/>
+                    <circle cx="100" cy="75" r="35" fill="#929dad" />
 
-                    <path
-                      d="M 35 180 C 35 130, 165 130, 165 180"
-                      fill="#929dad"/>
+                    <path d="M 35 180 C 35 130, 165 130, 165 180" fill="#929dad" />
                   </svg>
                 }
-
               </div>
 
               <p class="small text-secondary mt-3 mb-0">
@@ -61,13 +51,13 @@
             </div>
 
             <!-- Formulario -->
+            @if (mensaje()) {
+              <div class="alert alert-danger" role="alert">{{ mensaje() }}</div>
+            }
             <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-
               <!-- Nombre -->
               <div class="mb-3">
-                <label for="inputName" class="form-label">
-                  Nombre completo
-                </label>
+                <label for="inputName" class="form-label"> Nombre completo </label>
 
                 <input
                   type="text"
@@ -75,18 +65,15 @@
                   id="inputName"
                   formControlName="nombre"
                   placeholder="Ej. Juan Pérez"
-                  autocomplete="name">
+                  autocomplete="name"
+                />
 
-                <div class="form-text">
-                  Utiliza tu nombre real o el nombre que quieras mostrar.
-                </div>
+                <div class="form-text">Utiliza tu nombre real o el nombre que quieras mostrar.</div>
               </div>
 
               <!-- Correo -->
               <div class="mb-3">
-                <label for="inputEmail" class="form-label">
-                  Correo electrónico
-                </label>
+                <label for="inputEmail" class="form-label"> Correo electrónico </label>
 
                 <input
                   type="email"
@@ -94,18 +81,15 @@
                   id="inputEmail"
                   formControlName="correo"
                   placeholder="ejemplo@correo.com"
-                  autocomplete="email">
+                  autocomplete="email"
+                />
 
-                <div class="form-text">
-                  Tu correo se utilizará para identificar tu cuenta.
-                </div>
+                <div class="form-text">Tu correo se utilizará para identificar tu cuenta.</div>
               </div>
 
               <!-- Contraseña -->
               <div class="mb-3">
-                <label for="inputPassword" class="form-label">
-                  Contraseña
-                </label>
+                <label for="inputPassword" class="form-label"> Contraseña </label>
 
                 <input
                   type="password"
@@ -113,10 +97,11 @@
                   id="inputPassword"
                   formControlName="contrasena"
                   placeholder="Introduce una contraseña segura"
-                  autocomplete="new-password">
+                  autocomplete="new-password"
+                />
 
                 <div class="form-text">
-                  De 8 a 15 caracteres, con mayúscula, número y símbolo.
+                  Mínimo 8 caracteres, con mayúscula, minúscula, número y símbolo. Máximo 72 bytes.
                 </div>
               </div>
 
@@ -127,21 +112,29 @@
                   <span class="text-muted fw-normal">(opcional)</span>
                 </label>
 
-                <select
-                  class="form-select form-select-lg"
-                  id="inputRol"
-                  formControlName="rol">
-
+                <select class="form-select form-select-lg" id="inputRol" formControlName="rol">
                   <option value="">Seleccionar rol predeterminado</option>
                   <option value="usuario">Usuario</option>
                   <option value="administrador">Administrador</option>
                 </select>
 
-                <div class="form-text">
-                  Si no seleccionas uno, se asignará el rol de usuario.
-                </div>
+                <div class="form-text">Si no seleccionas uno, se asignará el rol de usuario.</div>
               </div>
 
+              @if (registerForm.controls.rol.value === 'administrador') {
+                <div class="mb-3">
+                  <label for="admin-code" class="form-label">Código de invitación</label
+                  ><input
+                    id="admin-code"
+                    type="password"
+                    class="form-control"
+                    formControlName="codigoAdministrador"
+                    autocomplete="off"
+                    required
+                  />
+                  <div class="form-text">Solicita tu invitación al responsable de Grupo Bikes.</div>
+                </div>
+              }
               <!-- Foto -->
               <div class="mb-4">
                 <label for="formFile" class="form-label">
@@ -153,35 +146,35 @@
                   class="form-control"
                   type="file"
                   id="formFile"
-                  accept="image/*"
-                  (change)="onFileSelected($event)">
+                  accept="image/jpeg,image/png,image/webp"
+                  (change)="onFileSelected($event)"
+                />
 
                 <div class="form-text">
-                  Formatos de imagen compatibles. Se usará un avatar
-                  predeterminado si no seleccionas una foto.
+                  Formatos de imagen compatibles. Se usará un avatar predeterminado si no
+                  seleccionas una foto.
                 </div>
               </div>
 
               <!-- Botón -->
               <button
                 type="submit"
-                class="btn btn-primary btn-lg w-100 register-button">
-
-                Crear mi cuenta
+                class="btn btn-primary btn-lg w-100 register-button"
+                [disabled]="busy()"
+              >
+                {{ busy() ? 'Creando cuenta…' : 'Crear mi cuenta' }}
               </button>
 
               <p class="text-center text-secondary small mt-4 mb-0">
                 Al registrarte, estás creando una cuenta en la plataforma.
               </p>
-
             </form>
           </div>
         </div>
 
         <p class="text-center text-secondary small mt-4">
-          Registro de usuario
+          ¿Ya tienes cuenta? <a routerLink="/login">Inicia sesión</a>
         </p>
-
       </div>
     </div>
   </div>

@@ -1,6 +1,7 @@
 import { Component, inject, signal, OnInit } from '@angular/core';
 import { CurrencyPipe } from '@angular/common';
 import { ProductosService } from '../../services/productos-service';
+import { API_URL } from '../../services/api';
 import { Productos } from '../../interfaces/productos';
 @Component({
   selector: 'app-componente-productos',
@@ -13,7 +14,7 @@ export class ComponenteProductos implements OnInit {
   productos = signal<Productos[]>([]);
   cargando = signal(true);
   error = signal(false);
-  imagenBaseURL = 'http://localhost:3002/imagenes/';
+  imagenBaseURL = API_URL + '/imagenes/';
   ngOnInit() {
     this.cargar();
   }

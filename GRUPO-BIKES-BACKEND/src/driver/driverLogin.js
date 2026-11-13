@@ -1,59 +1,33 @@
-import modeloUsuarios from "../modelos/modeloUsuarios.js";
-import { generarToken, verificarToken } from "../ayudas/funciones.js";
+import Users from "../modelos/modeloUsuarios.js";
 import bcrypt from "bcrypt";
-import fs from "fs";
-
-const controladorLogin = {
-    login: async(req, res)=>{
-        try {
-const{username, contrasena}=req.body;
-const encontrarUsuario = await modeloUsuarios.findOne({correo:username});
-
-
-const validacionContrasena = await bcrypt.compare(contrasena, encontrarUsuario.contrasena);
-if (validacionContrasena){
-    const token = await generarToken (
-        {
-            id : encontrarUsuario._id,
-            nombre: encontrarUsuario.nombre,
-            imagen: encontrarUsuario.imagen,
-            rol: encontrarUsuario.rol, /* SE DEBE USAR EN POSTMAN "USERNAME" y "CONTRASENA" */
-        });
-        res.json({
-            mensaje: `Bienvenido ${encontrarUsuario.nombre}`,
-            datos: token,
-            resultado: 'bien'
-        });
-    }
-     else {res.json({mensaje:'Contrasena o usuario incorrecto',
-        datos:null,
-     });
-    }
-        } catch (error) {
-            res.json({
-                mensaje: 'Error al logear',
-                datos: error.message,
-            });
-            
-        }
-    },
-validarToken: async (req, res) =>{
-    try {
-        const token2 = req.params.token;
-        const validar = await verificarToken(token2);
-        if (validar && validar.id) {
-            res.json({ mensaje: 'Token valido', datos: validar });
-        } else {
-            res.status(401).json({ mensaje: 'Token inválido', datos: null });
-        }
-    
-    } catch (error) {
-        res.json({
-            mensaje: 'Ocurrio un error al validar el token',
-            datos: error.message,
-        });
-    }
-    },
-}
-
-export default controladorLogin;
+import { email, fail } from "../ayudas/validacion.js";
+import { session, publicUser } from "../ayudas/funciones.js";
+const dummyHash = await bcrypt.hash("Not-a-real-account-password-7$", 12);
+export default {
+  async login(req, res) {
+    const correo = email(req.body?.username);
+    const password = req.body?.contrasena;
+    if (
+      typeof password !== "string" ||
+      !password ||
+      Buffer.byteLength(password) > 72
+    )
+      fail(400, "Ingresa tu contraseña.");
+    const candidates = await Users.find({ correo })
+      .collation({ locale: "en", strength: 2 })
+      .limit(2)
+      .select("+contrasena +tokenVersion");
+    if (candidates.length > 1)
+      fail(
+        409,
+        "Hay varias cuentas con este correo. Contacta al responsable de Grupo Bikes para unificarlas.",
+      );
+    const user = candidates[0];
+    const ok = await bcrypt.compare(password, user?.contrasena || dummyHash);
+    if (!user || !ok) fail(401, "Correo o contraseña incorrectos.");
+    res.json(session(user));
+  },
+  validarToken(req, res) {
+    res.json({ resultado: "bien", datos: publicUser(req.user) });
+  },
+};

@@ -1,14 +1,14 @@
-import contMarca from "../driver/driverMarcas.js";
 import { Router } from "express";
-import { uploadImage } from "../middlewares/resources.js";
-
-
-const marcasRoutes = Router();
-
-marcasRoutes.post('/', contMarca.crearMarca);
-marcasRoutes.get('/:id', contMarca.leerMarca);
-marcasRoutes.get('/', contMarca.leerMarcas);
-marcasRoutes.put('/:id', uploadImage, contMarca.actualizarMarca);
-marcasRoutes.delete('/:id', contMarca.eliminarMarca);
-
-export default marcasRoutes;
+import controller from "../driver/driverMarcas.js";
+import { authenticate, admin } from "../middlewares/auth.js";
+import { receiveImage } from "../middlewares/resources.js";
+import { id } from "../ayudas/validacion.js";
+import { rateLimit } from "../middlewares/rate-limit.js";
+const router = Router();
+router.get("/", controller.list);
+router.get("/:id", id, controller.get);
+router.use(authenticate, admin, rateLimit({ max: 100 }));
+router.post("/", receiveImage, controller.create);
+router.put("/:id", id, receiveImage, controller.update);
+router.delete("/:id", id, controller.remove);
+export default router;
