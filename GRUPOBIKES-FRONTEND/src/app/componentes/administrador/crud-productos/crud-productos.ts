@@ -48,10 +48,10 @@ export class CrudProductos {
     }
     //Constante para enviar los archivos físicos junto con el texto por el HTTP
     const formData= new FormData();
-    formData.append('marca', this.productoForm.marca);
-    formData.append('modelo', this.productoForm.modelo);
-    formData.append('descripcion', this.productoForm.descripcion);
     formData.append('imagen', file);
+    formData.append('modelo', this.productoForm.modelo);
+    formData.append('marca', this.productoForm.marca);
+    formData.append('descripcion', this.productoForm.descripcion);
     formData.append('color', this.productoForm.color);
     formData.append('categoria', this.productoForm.categoria);
     formData.append('precio', this.productoForm.precio.toString());
