@@ -1,0 +1,10 @@
+:host { display: block; }
+.brands-header { color: #f8fafc; }
+.brands-header h2 { font-family: 'Russo One', 'Inter', sans-serif; }
+.brands-header p { color: #aeb5c0; }
+.card { overflow: hidden; color: #f8fafc; background: rgba(26,26,28,.92); border: 1px solid rgba(255,255,255,.14); border-radius: 12px; transition: transform .2s ease, box-shadow .2s ease; }
+.card:hover { transform: translateY(-4px); box-shadow: 0 14px 30px rgba(0,0,0,.38); }
+.card-img-top { background: rgba(255,255,255,.9); }
+.card-text { color: #c3c8d0; }
+.btn-primary { background: #34373b; border-color: #5a5e64; }
+.btn-primary:hover { background: #4a4e54; border-color: #777; }

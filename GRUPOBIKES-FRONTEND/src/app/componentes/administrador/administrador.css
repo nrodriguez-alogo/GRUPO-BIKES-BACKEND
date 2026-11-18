@@ -1,0 +1,7 @@
+:host { display: block; }
+.admin-page { min-height: 70vh; color: #f8fafc; background: rgba(9,10,12,.68); }
+.admin-header { border-color: rgba(255,255,255,.18) !important; }
+.admin-header h2 { font-family: 'Russo One', 'Inter', sans-serif; }
+.admin-profile img { width: 50px; height: 50px; }
+.admin-content { padding: clamp(1rem, 3vw, 2rem); background: rgba(25,25,27,.9); border: 1px solid rgba(255,255,255,.14); border-radius: 12px; }
+@media (max-width: 700px) { .admin-header { align-items: flex-start !important; flex-direction: column; gap: 1rem; } .admin-profile { width: 100%; flex-wrap: wrap; } .admin-profile .ms-3 { margin-left: auto !important; } }

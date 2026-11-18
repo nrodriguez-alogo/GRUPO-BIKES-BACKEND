@@ -1,15 +1,19 @@
-<p>recover works!</p>
-<form [formGroup]="recoverForm" (ngSubmit)="handleRecover()">
-  <div class="mb-3">
-    <label for="exampleInputEmail1" class="form-label">Email address</label>
-    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" formControlName="correo">
-  </div>
-  <button type="submit" class="btn btn-primary">Submit</button>
-</form>
+<section class="recover-page">
+  <div class="recover-card">
+    <span class="material-symbols-outlined recover-icon" aria-hidden="true">lock_reset</span>
+    <h2>Recuperar cuenta</h2>
+    <p>Ingresa el correo asociado a tu cuenta para recibir las instrucciones de recuperación.</p>
 
-<!-- Decorador -->
- @if (mensaje()){
-    <div class="alert alert-info mt-3">
-        {{ mensaje() }}
-    </div>
- }
+    <form [formGroup]="recoverForm" (ngSubmit)="handleRecover()">
+      <div class="mb-3">
+        <label for="recoverEmail" class="form-label">Correo electrónico</label>
+        <input type="email" class="form-control" id="recoverEmail" formControlName="correo" autocomplete="email" placeholder="ejemplo@correo.com" required>
+      </div>
+      <button type="submit" class="btn btn-secondary w-100">Enviar solicitud</button>
+    </form>
+
+    @if (mensaje()){
+      <div class="alert alert-info mt-3" role="status">{{ mensaje() }}</div>
+    }
+  </div>
+</section>

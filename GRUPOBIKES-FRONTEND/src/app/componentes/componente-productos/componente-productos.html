@@ -1,61 +1,61 @@
-<div class="mb-5">
-    <h3 class="mb-3 border-bottom pb-2">Motos nuevas</h3>
+<main class="catalogo-page container py-5">
+<section class="mb-5" aria-labelledby="motos-nuevas">
+    <h3 id="motos-nuevas" class="mb-3 border-bottom pb-2">Motos nuevas</h3>
     <div class="row g-3">
     @for (prod of motosNuevas(); track prod._id){
-    <div class="col-md-4">
+    <div class="col-12 col-md-6 col-xl-4">
       <div class="card h-100 shadow-sm">
         <img
           [src]="imagenBaseURL + prod.imagen"
-          class="card-img-top p-2 object-fit-contain"
-          style="height: 200px;"
+          class="card-img-top p-2 object-fit-contain product-image"
           [alt]="prod.modelo">
         <div class="card-body">
           <h5 class="card-title">{{ prod.modelo }}</h5>
-          <p>{{ prod.marca }}</p>
-          <p>{{ prod.modelo }}</p>
-          <p>{{ prod.descripcion }}</p>
-          <p>{{ prod.imagen }}</p>
-          <p>{{ prod.color }}</p>
-          <p>{{ prod.categoria }}</p>
-          <p>{{ prod.precio }}</p>
-          <p>{{ prod.estado }}</p>
-          <p>{{ prod.cilindraje }}</p>
+          <p class="product-brand">{{ prod.marca }}</p>
+          <p class="product-description">{{ prod.descripcion }}</p>
+          <dl class="product-specs">
+            <div><dt>Color</dt><dd>{{ prod.color }}</dd></div>
+            <div><dt>Categoría</dt><dd>{{ prod.categoria }}</dd></div>
+            <div><dt>Estado</dt><dd>{{ prod.estado }}</dd></div>
+            <div><dt>Cilindraje</dt><dd>{{ prod.cilindraje }}</dd></div>
+          </dl>
+          <p class="product-price">${{ prod.precio }}</p>
         </div>
     </div> 
 </div>
 }@empty {
-    <p class="card text">No hay productos en esta categoría</p>
+    <p class="empty-state">No hay productos en esta categoría.</p>
 }
  </div> 
-</div>
+</section>
 
-<div class="mb-5">
-    <h3 class="mb-3 border-bottom pb-2">Motos usadas</h3>
+<section class="mb-5" aria-labelledby="motos-usadas">
+    <h3 id="motos-usadas" class="mb-3 border-bottom pb-2">Motos usadas</h3>
     <div class="row g-3">
     @for (prod of motosUsadas(); track prod._id){
-    <div class="col-md-4">
+    <div class="col-12 col-md-6 col-xl-4">
       <div class="card h-100 shadow-sm">
         <img
           [src]="imagenBaseURL + prod.imagen"
-          class="card-img-top p-2 object-fit-contain"
-          style="height: 200px;"
+          class="card-img-top p-2 object-fit-contain product-image"
           [alt]="prod.modelo">
         <div class="card-body">
           <h5 class="card-title">{{ prod.modelo }}</h5>
-          <p>{{ prod.marca }}</p>
-          <p>{{ prod.modelo }}</p>
-          <p>{{ prod.descripcion }}</p>
-          <p>{{ prod.imagen }}</p>
-          <p>{{ prod.color }}</p>
-          <p>{{ prod.categoria }}</p>
-          <p>{{ prod.precio }}</p>
-          <p>{{ prod.estado }}</p>
-          <p>{{ prod.cilindraje }}</p>
+          <p class="product-brand">{{ prod.marca }}</p>
+          <p class="product-description">{{ prod.descripcion }}</p>
+          <dl class="product-specs">
+            <div><dt>Color</dt><dd>{{ prod.color }}</dd></div>
+            <div><dt>Categoría</dt><dd>{{ prod.categoria }}</dd></div>
+            <div><dt>Estado</dt><dd>{{ prod.estado }}</dd></div>
+            <div><dt>Cilindraje</dt><dd>{{ prod.cilindraje }}</dd></div>
+          </dl>
+          <p class="product-price">${{ prod.precio }}</p>
         </div>
     </div> 
 </div>
 }@empty {
-    <p class="card text">No hay productos en esta categoría</p>
+    <p class="empty-state">No hay productos en esta categoría.</p>
 }
  </div> 
-</div>
+</section>
+</main>
