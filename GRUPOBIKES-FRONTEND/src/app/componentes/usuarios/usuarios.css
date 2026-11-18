@@ -1,0 +1,5 @@
+:host { display: block; }
+.content-page { display: grid; min-height: 55vh; place-items: center; color: #f8fafc; }
+.content-card { width: min(100%, 680px); padding: clamp(2rem, 6vw, 4rem); background: rgba(24,24,26,.9); border: 1px solid rgba(255,255,255,.14); border-radius: 14px; box-shadow: 0 16px 35px rgba(0,0,0,.35); }
+.content-card span { font-size: 3rem; }
+.content-card p { color: #adb4be; }

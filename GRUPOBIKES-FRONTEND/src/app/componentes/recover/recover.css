@@ -1,0 +1,27 @@
+:host { display: block; }
+
+.recover-page {
+  display: grid;
+  min-height: clamp(500px, 70vh, 760px);
+  padding: 3rem 1rem;
+  place-items: center;
+  background: rgba(0, 0, 0, .28);
+}
+
+.recover-card {
+  width: min(100%, 460px);
+  padding: clamp(1.5rem, 5vw, 2.5rem);
+  color: #f8fafc;
+  background: rgba(30, 30, 30, .93);
+  border: 1px solid rgba(255, 255, 255, .16);
+  border-radius: 12px;
+  box-shadow: 0 16px 35px rgba(0, 0, 0, .45);
+}
+
+.recover-card h2 { margin-bottom: .75rem; text-align: center; }
+.recover-card > p { color: #aeb5c0; text-align: center; }
+.recover-icon { display: block; font-size: 3rem; text-align: center; }
+.form-label { color: #c8cdd5; font-weight: 600; }
+.form-control { background: #101113; border-color: #444; color: #fff; }
+.form-control:focus { background: #101113; border-color: #888; color: #fff; box-shadow: 0 0 0 .2rem rgba(255,255,255,.1); }
+.form-control::placeholder { color: #777; }

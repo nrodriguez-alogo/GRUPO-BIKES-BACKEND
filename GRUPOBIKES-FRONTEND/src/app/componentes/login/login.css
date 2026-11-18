@@ -3,20 +3,27 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
-  background-color: #121212; /* Gris casi negro */
+  min-height: clamp(520px, 72vh, 800px);
+  padding: 3rem 1rem;
+  background: rgba(0, 0, 0, .28);
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 /* Caja oscura con bordes neutros */
 .login-card {
-  background: #1e1e1e; /* Gris oscuro neutro */
+  background: rgba(30, 30, 30, .92);
   padding: 2.5rem;
   border-radius: 12px;
-  border: 1px solid #2d2d2d;
+  border: 1px solid rgba(255, 255, 255, .16);
   box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.6);
   width: 100%;
   max-width: 400px;
+}
+
+.login-subtitle {
+  margin: -.75rem 0 1.75rem;
+  color: #aeb5c0;
+  text-align: center;
 }
 
 .login-card h2 {
@@ -122,4 +129,10 @@ button[type="button"]:active,
 .btn-login:active {
   background-color: #222222; /* Se oscurece ligeramente al presionar */
   transform: scale(0.98);
+}
+
+@media (max-width: 480px) {
+  .login-card {
+    padding: 1.5rem;
+  }
 }

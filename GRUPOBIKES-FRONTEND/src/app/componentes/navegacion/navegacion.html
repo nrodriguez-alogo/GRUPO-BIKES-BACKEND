@@ -8,9 +8,10 @@
     </a>
 
     <!-- Barra de búsqueda -->
-    <div class="search-box">
-      <input type="text" placeholder="¿Qué buscas?" class="search-input">
-      <span class="material-symbols-outlined search-icon">search</span>
+    <div class="search-box" role="search">
+      <label class="visually-hidden" for="site-search">Buscar en Grupo Bikes</label>
+      <input id="site-search" type="search" placeholder="¿Qué buscas?" class="search-input">
+      <span class="material-symbols-outlined search-icon" aria-hidden="true">search</span>
     </div>
 
     <!-- Acciones de usuario y carrito -->
@@ -30,18 +31,16 @@
         <span>Iniciar sesión</span>
         <span class="material-symbols-outlined">account_circle</span>
       </a>
-      <button (click)="logout()" class="btn btn-danger">Logout</button>
+      <button type="button" (click)="logout()" class="btn btn-danger action-button">Salir</button>
     </div>
-    <div>
-      <button routerLink="/registro" class="btn btn-info">Registro</button>
-  </div>
+    <a routerLink="/registro" class="btn btn-info register-button">Registro</a>
   </div>
 
 
 
 
   <!-- Navegación -->
-  <nav class="nav-bar">
+  <nav class="nav-bar" aria-label="Navegación principal">
     <a routerLink="/home"
        class="nav-link">Inicio</a>
 

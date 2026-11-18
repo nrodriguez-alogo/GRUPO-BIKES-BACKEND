@@ -1,1 +1,68 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+  --gb-bg: #090a0c;
+  --gb-surface: rgba(18, 18, 20, 0.86);
+  --gb-surface-soft: rgba(30, 30, 32, 0.72);
+  --gb-border: rgba(255, 255, 255, 0.16);
+  --gb-text: #f8fafc;
+  --gb-muted: #aeb5c0;
+  --gb-accent: #dc3545;
+}
+
+html {
+  min-width: 320px;
+  min-height: 100%;
+  background: var(--gb-bg);
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  color: var(--gb-text);
+  background:
+    linear-gradient(rgba(4, 5, 7, 0.68), rgba(4, 5, 7, 0.82)),
+    url('/thumb-1920-7181.jpg') center / cover fixed no-repeat;
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+}
+
+app-root {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+router-outlet + * {
+  flex: 1 0 auto;
+}
+
+img {
+  max-width: 100%;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+:focus-visible {
+  outline: 3px solid rgba(255, 255, 255, 0.85);
+  outline-offset: 3px;
+}
+
+@media (max-width: 768px) {
+  body {
+    background-attachment: scroll;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

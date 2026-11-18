@@ -1,0 +1,16 @@
+:host { display: block; }
+.catalogo-page { color: #f8fafc; }
+.catalogo-page h3 { border-color: rgba(255,255,255,.22) !important; font-family: 'Russo One', 'Inter', sans-serif; }
+.card { overflow: hidden; color: #f8fafc; background: rgba(25,25,27,.92); border: 1px solid rgba(255,255,255,.14); border-radius: 12px; transition: transform .2s ease, box-shadow .2s ease; }
+.card:hover { transform: translateY(-4px); box-shadow: 0 14px 30px rgba(0,0,0,.38) !important; }
+.product-image { height: 220px; background: rgba(255,255,255,.04); }
+.card-title { margin-bottom: .15rem; font-size: 1.35rem; }
+.product-brand { color: #b9c0ca; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; }
+.product-description { color: #d4d7dc; }
+.product-specs { display: grid; grid-template-columns: 1fr 1fr; gap: .65rem; margin: 1rem 0; }
+.product-specs div { padding: .65rem; background: rgba(255,255,255,.06); border-radius: 7px; }
+.product-specs dt { color: #939ba7; font-size: .75rem; text-transform: uppercase; }
+.product-specs dd { margin: 0; overflow-wrap: anywhere; }
+.product-price { margin: 1rem 0 0; color: #fff; font-size: 1.35rem; font-weight: 700; }
+.empty-state { width: 100%; padding: 2.5rem 1rem; color: #c0c5cc; text-align: center; background: rgba(20,20,22,.78); border: 1px dashed rgba(255,255,255,.25); border-radius: 10px; }
+@media (max-width: 420px) { .product-specs { grid-template-columns: 1fr; } }

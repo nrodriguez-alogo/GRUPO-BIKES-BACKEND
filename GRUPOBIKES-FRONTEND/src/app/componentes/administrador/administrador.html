@@ -1,14 +1,14 @@
 <!-- Contenedor general del encabezado de Admin -->
-<div class="container-fluid p-4">
-  <div class="d-flex justify-content-between align-items-center border-bottom pb-3 mb-4">
+<main class="admin-page container-fluid p-3 p-md-4">
+  <header class="admin-header d-flex justify-content-between align-items-center border-bottom pb-3 mb-4">
 
     <h2>Bienvenido Admin</h2>
 
     <!-- ZONA SUPERIOR DERECHA: Foto circular y Nombre -->
-    <div class="d-flex align-items-center gap-3">
+    <div class="admin-profile d-flex align-items-center gap-3">
       <div class="text-end">
         <!-- Mostramos el nombre reactivo con la señal adminName() -->
-        <span class="d-block fw-bold text-dark">{{ adminName() }}</span>
+        <span class="d-block fw-bold">{{ adminName() }}</span>
         <small class="text-muted">Administrador</small>
       </div>
 
@@ -17,7 +17,7 @@
         [src]="adminImage()"
         alt="Foto de perfil"
         class="rounded-circle border border-2 border-primary object-fit-cover shadow-sm"
-        style="width: 50px; height: 50px;">
+        width="50" height="50">
 
       <!-- Botón de Cerrar sesión -->
       <button class="btn btn-outline-danger btn-sm ms-3" (click)="logout()">
@@ -25,7 +25,7 @@
       </button>
     </div>
 
-  </div>
+  </header>
 
   <!-- Contenido principal de tu panel de administración -->
   <div class="row">
@@ -33,5 +33,5 @@
       <p class="lead">Panel de control de administración activo.</p>
     </div>
   </div>
-  <div><app-crud-productos></app-crud-productos></div>
-</div>
+  <section class="admin-content"><app-crud-productos></app-crud-productos></section>
+</main>

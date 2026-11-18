@@ -1,8 +1,8 @@
 
-body{
-    background-image: url('/thumb-1920-7181.jpg');
-    background-size: cover;
+:host {
+    display: block;
 }
+
 hr{
     height: 2px;
     background: linear-gradient(90deg, black, rgb(243, 0, 0), black);
@@ -12,8 +12,23 @@ hr{
 /* carroulse */
 .CarrouselImagenExample{
     width: 100%;
-    height: 90vh;
-    box-shadow: -445px -1445px -145px rgb(0, 0, 0);
+    height: clamp(420px, 78vh, 820px);
+    object-fit: cover;
+    filter: brightness(.72) contrast(1.04);
+}
+
+.carousel-caption {
+    bottom: clamp(2rem, 8vw, 6rem);
+    padding: 1.25rem;
+    background: rgba(0, 0, 0, .46);
+    border: 1px solid rgba(255, 255, 255, .14);
+    border-radius: 12px;
+    backdrop-filter: blur(8px);
+}
+
+.carousel-caption h1 {
+    font-family: 'Russo One', 'Inter', sans-serif;
+    font-size: clamp(1.8rem, 4vw, 3.4rem);
 }
 /* prodcutos */
 .productos-container{
@@ -23,7 +38,8 @@ hr{
     backdrop-filter: blur(10px);
     width: 100%;
     background-color: rgba(255, 252, 252, 0);
-    height: 10rem;
+    min-height: 10rem;
+    padding: 2rem 1rem;
 }
 .prodcutos-texto{
     text-align: center;
@@ -42,5 +58,36 @@ hr{
     backdrop-filter: blur(10px);
     width: 100%;
     background-color: rgba(12, 12, 12, 0.479);
-    height: 50rem;
+    min-height: 32rem;
+    height: auto;
+    padding: 4rem 1rem;
+}
+
+.productos-container,
+.productos-tarjetas {
+    border-block: 1px solid rgba(255, 255, 255, .12);
+}
+
+.prodcutos-texto p,
+.productos-tarjetas-texto p {
+    color: #d8dde5;
+}
+
+@media (max-width: 767px) {
+    .CarrouselImagenExample {
+        height: 62vh;
+        min-height: 380px;
+    }
+
+    .carousel-caption {
+        display: block !important;
+        right: 8%;
+        left: 8%;
+        bottom: 1.5rem;
+    }
+
+    .carousel-caption p {
+        margin-bottom: 0;
+        font-size: .9rem;
+    }
 }
