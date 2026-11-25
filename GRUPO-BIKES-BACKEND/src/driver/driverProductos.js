@@ -1,13 +1,13 @@
 import { request } from 'express';
 import modeloProductos from '../modelos/modeloProductos.js';
-import { uploadImage } from '../middlewares/resources.js';
+import { uploadSingleImage } from '../middlewares/resources.js';
 import fs from 'fs';
 import path from 'path';
 
 const controladorProducto = {
     crearProducto: async (req, res) => {
         try {
-            uploadImage(req, res, async (error) => {
+            uploadSingleImage(req, res, async (error) => {
                 if (error) {
                     return res.status(400).json({
                         mensaje: 'Ocurrió un error al cargar la imagen',
@@ -76,7 +76,7 @@ const controladorProducto = {
 
     actualizarProducto: async (req, res) => {
         try {
-            uploadImage(req, res, async (error) => {
+            uploadSingleImage(req, res, async (error) => {
                 if (error) {
                     return res.status(400).json({ mensaje: 'Error al procesar la imagen', datos: error });
                 }
