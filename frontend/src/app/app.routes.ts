@@ -4,7 +4,6 @@ import { Anuncios } from './componentes/anuncios/anuncios';
 import { Login } from './componentes/login/login';
 import { Marcas } from './componentes/marcas/marcas';
 import { Registro } from './componentes/registro/registro';
-import { Usuarios } from './componentes/usuarios/usuarios';
 import { Administrador } from './componentes/administrador/administrador';
 import { authGuard } from './guards/auth-guard';
 import { Recover } from './componentes/recover/recover';
@@ -22,7 +21,6 @@ export const routes: Routes = [
   { path: 'marcas', title: 'Marcas', component: Marcas },
   { path: 'productos', title: 'Productos', component: ComponenteProductos },
   { path: 'registro', title: 'Registro', component: Registro },
-  { path: 'usuarios', title: 'Usuarios', component: Usuarios },
   { path: 'administrador', title: 'Administrador', component: Administrador, canActivate:[authGuard]},
   { path: 'recover', title: 'Recover', component: Recover },
   { path: '', redirectTo: 'home', pathMatch: 'full'},
