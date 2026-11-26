@@ -51,5 +51,4 @@ jest.unstable_mockModule('../src/modelos/modeloProductos.js', ()=>({
             });
     });
 
-
     });
