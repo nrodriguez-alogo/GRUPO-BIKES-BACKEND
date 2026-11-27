@@ -12,8 +12,8 @@ const controladorAnuncios = {//Controlador anuncios
                         mensaje: 'Ocurrió un error al cargar la imagen',
                         datos: error
                     });
-               }
-               const nuevoAnuncio = new modeloNoticias({
+            }
+            const nuevoAnuncio = new modeloNoticias({
                     titulo:req.body.titulo,
                     subtitulo:req.body.subtitulo,
                     contenido:req.body.contenido,
