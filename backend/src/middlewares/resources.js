@@ -8,7 +8,7 @@ const storage = multer.diskStorage({   //constante para hacer la configuración 
         const nameWithoutExt = path.basename(file.originalname, extension).replace(/\s+/g,'-').toLowerCase();//Extrae el nombre del archivo sin la extensión
         const timestamp = new Date().toISOString().replace(/[-:.TZ]/g, '');//Para establecer la fecha y hora
         const uniqueName = `${nameWithoutExt}${timestamp}${extension}`;//Para generar el nombre completo
-           
+    
         callback(null,uniqueName); 
     },
 });
