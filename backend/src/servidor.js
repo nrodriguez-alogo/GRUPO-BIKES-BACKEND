@@ -31,13 +31,13 @@ servidor.use('/login/token', rutalogin);
 
 // Ruta raíz
 servidor.get('/', (req, res) => {
-    res.status(200).json({ mensaje: "API ejecutándose correctamente" });
+    return res.status(200).json({ mensaje: "API ejecutándose correctamente" });
 });
 
 // Ruta por defecto para manejar endpoints no encontrados (404)
 servidor.use((req, res) => {
     console.log(`404: ${req.method} ${req.originalUrl}`);
-    res.status(404).json({
+    return res.status(404).json({
         mensaje: "Ruta no encontrada",
         metodo: req.method,
         ruta: req.originalUrl,

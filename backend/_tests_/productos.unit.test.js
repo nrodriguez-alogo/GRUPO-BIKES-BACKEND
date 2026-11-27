@@ -2,7 +2,8 @@ import { jest } from '@jest/globals';
 import request from 'supertest';
 
 const mockSave = jest.fn();
-const mockModeloProductos = jest.fn().mockImplementation((datos)=>({
+const mockModeloProductos =
+jest.fn().mockImplementation((datos)=>({
     ...datos,
     save: mockSave,
 }));

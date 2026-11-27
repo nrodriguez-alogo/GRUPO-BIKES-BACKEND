@@ -19,7 +19,7 @@ if (validacionContrasena){
             imagen: encontrarUsuario.imagen,
             rol: encontrarUsuario.rol, /* SE DEBE USAR EN POSTMAN "USERNAME" y "CONTRASENA" */
         });
-        res.json({
+        return res.json({
             mensaje: `Bienvenido ${encontrarUsuario.nombre}`,
             datos: token,
             resultado: 'bien'
@@ -30,7 +30,7 @@ if (validacionContrasena){
      });
     }
         } catch (error) {
-            res.json({
+            return res.json({
                 mensaje: 'Error al logear',
                 datos: error.message,
             });
@@ -42,13 +42,13 @@ validarToken: async (req, res) =>{
         const token2 = req.params.token;
         const validar = await verificarToken(token2);
         if (validar && validar.id) {
-            res.json({ mensaje: 'Token valido', datos: validar });
+            return res.json({ mensaje: 'Token valido', datos: validar });
         } else {
             res.status(401).json({ mensaje: 'Token inválido', datos: null });
         }
     
     } catch (error) {
-        res.json({
+        return res.json({
             mensaje: 'Ocurrio un error al validar el token',
             datos: error.message,
         });

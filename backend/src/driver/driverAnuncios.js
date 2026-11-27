@@ -142,7 +142,7 @@ const controladorAnuncios = {//Controlador anuncios
                 mensaje: "Error al eliminar el anuncio.",
                 datos: error,
             });
-       } 
+        } 
     }
 }
 

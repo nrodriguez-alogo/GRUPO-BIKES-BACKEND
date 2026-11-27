@@ -26,7 +26,7 @@ const contMarca = {
 
                 const guardarMarca = await nuevaMarca.save();
 
-                res.json({
+                return res.json({
                     mensaje: 'Marca creada.',
                     datos: guardarMarca
                 });
@@ -34,7 +34,7 @@ const contMarca = {
             });
 
         } catch (error) {
-            res.json({
+            return res.json({
                 mensaje: 'Ocurrió un error al crear la marca.',
                 datos: error
             })
@@ -47,13 +47,13 @@ const contMarca = {
         try {
             const marcaEncontrada = await modeloMarcas.findById(req.params.id);
             if(marcaEncontrada.id){
-                res.json({
+                return res.json({
                     mensaje: 'Marca encontrada',
                     datos: marcaEncontrada,
                 })
             }
         } catch (error) {
-            res.json({
+            return res.json({
                 mensaje: 'Ocurrió un error al buscar la marca',
                 datos: error,
             })
@@ -70,7 +70,7 @@ const contMarca = {
                 if(req.file){
                     fs.unlinkSync(req.file.path);
                 }
-                res.json({
+                return res.json({
                     mensaje: 'Marca no encontrada',
                     datos: null,
                 });
@@ -103,7 +103,7 @@ const contMarca = {
             console.log(actualizarMarca);
 
        } catch (error) {
-            res.json({
+            return res.json({
                 mensaje: 'Error al actualizar la marca',
                 datos: error
             })
@@ -118,7 +118,7 @@ const contMarca = {
         );
 
         if(!marcaParaEliminar){
-            res.json({
+            return res.json({
                 mensaje: "Marca no encontrada para eliminar.",
                 datos: error,
             })
@@ -132,13 +132,13 @@ const contMarca = {
             }
         }
 
-        res.json({
+        return res.json({
             mensaje: "Marca eliminada correctamente.",
             datos: null,
         });
 
        } catch (error) {
-            res.json({
+            return res.json({
                 mensaje: "Error al eliminar la marca",
                 datos: error,
             });
@@ -149,13 +149,13 @@ const contMarca = {
         try {
             const marcasEncontradas = await modeloMarcas.find();
             
-                res.json({
+                return res.json({
                     mensaje: 'Marcas encontradas',
                     datos: marcasEncontradas,
                 })
         
         } catch (error) {
-            res.json({
+            return res.json({
                 mensaje: 'Ocurrió un error al buscar la marca',
                 datos: error,
             })
