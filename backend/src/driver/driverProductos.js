@@ -29,13 +29,13 @@ const controladorProducto = {
 
                 const guardarProducto = await nuevoProducto.save();
 
-                res.status(201).json({
+                return res.status(201).json({
                     mensaje: 'Producto creado satisfactoriamente',
                     datos: guardarProducto
                 });
             });
         } catch (error) {
-            res.status(500).json({
+            return res.status(500).json({
                 mensaje: 'Ocurrió un error al crear el producto',
                 datos: error.message
             });
@@ -44,12 +44,12 @@ const controladorProducto = {
     leerProductos: async (req, res) => {
         try {
             const productos = await modeloProductos.find();
-            res.status(200).json({
+            return res.status(200).json({
                 mensaje: 'Productos encontrados correctamente',
                 datos: productos
             });
         } catch (error) {
-            res.status(500).json({
+            return res.status(500).json({
                 mensaje: 'Error al obtener los productos',
                 datos: error.message
             });
@@ -62,12 +62,12 @@ const controladorProducto = {
             if (!producto) {
                 return res.status(404).json({ mensaje: 'Producto no encontrado' });
             }
-            res.status(200).json({
+            return res.status(200).json({
                 mensaje: 'Producto encontrado',
                 datos: producto
             });
         } catch (error) {
-            res.status(500).json({
+            return res.status(500).json({
                 mensaje: 'Error al buscar el producto',
                 datos: error.message
             });
@@ -116,13 +116,13 @@ const controladorProducto = {
                     { new: true, runValidators: true }
                 );
 
-                res.status(200).json({
+                return res.status(200).json({
                     mensaje: 'Producto actualizado correctamente',
                     datos: productoActualizado
                 });
             });
         } catch (error) {
-            res.status(500).json({
+            return res.status(500).json({
                 mensaje: 'Error al actualizar el producto',
                 datos: error.message
             });
@@ -143,12 +143,12 @@ const controladorProducto = {
                 }
             }
 
-            res.status(200).json({
+            return res.status(200).json({
                 mensaje: 'Producto eliminado correctamente.',
                 datos: null
             });
         } catch (error) {
-            res.status(500).json({
+            return res.status(500).json({
                 mensaje: 'Error al eliminar el producto',
                 datos: error.message
             });

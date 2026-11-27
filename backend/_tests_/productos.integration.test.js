@@ -44,7 +44,7 @@ const {default: servidor} = await import('../src/servidor.js');
 describe ('PRUEBA DE INTEGRACIÓN', ()=>{
     beforeEach (()=>{
         jest.clearAllMocks();
-        //Nuevo
+        //Nuevo. clearAllMocks no borra los valores configurados con mockResolvedValue
         modeloProductos.find.mockReset();
         modeloProductos.findById.mockReset();
         modeloProductos.findByIdAndUpdate.mockReset();
@@ -52,7 +52,7 @@ describe ('PRUEBA DE INTEGRACIÓN', ()=>{
         mockSave.mockReset();
         //Hasta aquí
     });
-    //Prueba de leerProductos GET
+    //Prueba 1 de leerProductos GET
     test('GET/productos', async()=>{
         //Arrange (preparar)
         const mockProductos = [
@@ -73,4 +73,5 @@ describe ('PRUEBA DE INTEGRACIÓN', ()=>{
                 datos: mockProductos
             });
         });
+        //Prueba 2 
     });

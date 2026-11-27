@@ -32,7 +32,7 @@ const controladorUsuario = {
 
                 const guardarUsuario = await nuevoUsuario.save();
 
-                res.status(201).json({
+                return res.status(201).json({
                     mensaje: 'usuario creado exitosamente',
                     datos: guardarUsuario
                 });
@@ -41,7 +41,7 @@ const controladorUsuario = {
             if (req.file && fs.existsSync(`imagenes/usuarios/${req.file.filename}`)) {
                 fs.unlinkSync(`imagenes/usuarios/${req.file.filename}`);
             }
-            res.status(500).json({
+            return res.status(500).json({
                 mensaje: 'Excelente',
                 datos: error.message
             });
@@ -50,12 +50,12 @@ const controladorUsuario = {
     leerUsuario: async (req, res) => {
         try {
             const usuario = await modeloUsuarios.find();
-            res.status(200).json({
+            return res.status(200).json({
                 mensaje: 'usuario encontrado exitosamente',
                 datos: usuario
             });
         } catch (error) {
-            res.status(500).json ({
+            return res.status(500).json ({
                 mensaje: 'error buscando el usuario (posiblemente no existe o esta mal escrita)',
                 datos: error.message
             });
@@ -68,12 +68,12 @@ const controladorUsuario = {
             if (!usuario) {
                 return res.status(404).json({ mensaje: 'usuario definitivamente no encontrado xd'});  
             }
-            res.status(200).json({
+            return res.status(200).json({
                 mensaje: 'usuario encontrado :v',
                 datos: usuario
             });
         } catch (error) {
-            res.status(500).json ({
+            return res.status(500).json ({
                 mensaje: 'error buscando el ID (posiblemente no existe o esta mal escrita)',
                 datos: error.message
             });
@@ -118,13 +118,13 @@ const controladorUsuario = {
                  { new: true, runValidations: true }
                 );
 
-                res.status(200).json({
+                return res.status(200).json({
                     mensaje: 'usuario actializado',
                     datos: usuarioActualizado
                 });
             });
         } catch (error) {
-            res.status(500).json({
+            return res.status(500).json({
                 mensaje: 'Error encontrado, solucionelo rapidamente',
                 datos: error.message
             });
@@ -144,12 +144,12 @@ const controladorUsuario = {
                 }
             }
             
-            res.status(200).json({
+            return res.status(200).json({
                 mensaje: 'elminado usuario correctametne',
                 datos: null
             });
         } catch (error) {
-            res.status(500).json({
+            return res.status(500).json({
                 mensaje: 'error eliminando cliente'
             });
         }
@@ -195,14 +195,14 @@ export const olvidarContrasena = async (req, res)=> {
         }
 
         await transporter.sendMail(mailOptions);
-        res.json({
+        return res.json({
             resultado:'fine',
             mensaje: 'Se ha enviado una nueva contraseña al correo registrado',
             });
          
     } catch (error) {
         console.log('Error al generar contraseña')
-        res.json({
+        return res.json({
             resultado:'mistake',
             mensaje: 'Error interno en el servidor', error: error.mensaje,
             });
